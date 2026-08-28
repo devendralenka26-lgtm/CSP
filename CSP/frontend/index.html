@@ -1,0 +1,4678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriAI — AI Smart Farming Platform</title>
+  
+  <!-- Web Manifest and Service Worker -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#10b981">
+  <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/628/628283.png">
+  
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Chart.js for analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Supabase JS Client for Auth -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <!-- CSS Stylesheet -->
+  <!-- Inline Premium CSS Styling System -->
+  <style>
+/* ==========================================
+   AGRIAI PREMIUM CSS STYLING SYSTEM
+   ========================================== */
+
+/* Design Tokens & Theme Variables */
+:root {
+  --primary: #10b981;
+  --primary-rgb: 16, 185, 129;
+  --primary-hover: #059669;
+  --primary-light: #ecfdf5;
+  --secondary: #6b7280;
+  --secondary-light: #f3f4f6;
+  
+  --bg-app: #f4f6f5;
+  --bg-card: rgba(255, 255, 255, 0.75);
+  --bg-sidebar: #064e3b;
+  --text-main: #1f2937;
+  --text-muted: #6b7280;
+  --border-color: rgba(16, 185, 129, 0.15);
+  --shadow-main: 0 8px 32px 0 rgba(16, 185, 129, 0.08);
+  
+  --emerald: #10b981;
+  --blue: #3b82f6;
+  --yellow: #eab308;
+  --red: #ef4444;
+  --purple: #8b5cf6;
+  
+  --font-family: 'Inter', sans-serif;
+  --font-display: 'Outfit', sans-serif;
+  
+  --border-radius: 16px;
+  --transition-speed: 0.3s;
+}
+
+body.dark-mode {
+  --bg-app: #022c22;
+  --bg-card: rgba(6, 78, 59, 0.4);
+  --bg-sidebar: #011c15;
+  --text-main: #f3f4f6;
+  --text-muted: #9ca3af;
+  --border-color: rgba(16, 185, 129, 0.25);
+  --shadow-main: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --primary-light: rgba(16, 185, 129, 0.1);
+  --secondary-light: rgba(255, 255, 255, 0.05);
+}
+
+/* Base resets & utilities */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  line-height: 1.6;
+  overflow-x: hidden;
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Glassmorphism Styles */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-main);
+  transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease, background var(--transition-speed);
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px 0 rgba(16, 185, 129, 0.12);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-family);
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  border: none;
+  font-size: 0.95rem;
+}
+
+.btn-lg {
+  padding: 1rem 2rem;
+  font-size: 1.05rem;
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--emerald), #059669);
+  color: white;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: var(--secondary-light);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  background: var(--border-color);
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  color: var(--text-main);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  transition: background var(--transition-speed);
+}
+
+.btn-icon:hover {
+  background: var(--border-color);
+}
+
+.btn-text {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-text:hover {
+  text-decoration: underline;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.position-relative {
+  position: relative;
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  width: fit-content;
+}
+
+.badge-emerald {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: var(--emerald);
+}
+
+.badge-success {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: var(--emerald);
+}
+
+.badge-warning {
+  background-color: rgba(234, 179, 8, 0.15);
+  color: var(--yellow);
+}
+
+.badge-error {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: var(--red);
+}
+
+.badge-dot {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 10px;
+  height: 10px;
+  background-color: var(--red);
+  border-radius: 50%;
+  border: 2px solid var(--bg-app);
+}
+
+/* Text helpers */
+.text-gradient {
+  background: linear-gradient(135deg, #10b981, #047857);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-emerald { color: var(--emerald); }
+.text-blue { color: var(--blue); }
+.text-yellow { color: var(--yellow); }
+.text-red { color: var(--red); }
+.text-secondary { color: var(--text-muted); }
+.font-bold { font-weight: 700; }
+.text-xs { font-size: 0.75rem; }
+.text-sm { font-size: 0.875rem; }
+.text-center { text-align: center; }
+.mb-3 { margin-bottom: 0.75rem; }
+.mt-3 { margin-top: 0.75rem; }
+.mt-4 { margin-top: 1rem; }
+.mt-5 { margin-top: 1.5rem; }
+.ml-auto { margin-left: auto; }
+.rounded-lg { border-radius: 12px; }
+.shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+
+/* Landing Header */
+#main-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem 0;
+  transition: background var(--transition-speed);
+}
+
+body.dark-mode #main-header {
+  background: rgba(1, 28, 21, 0.85);
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-links a {
+  font-weight: 500;
+  color: var(--text-main);
+  transition: color var(--transition-speed);
+}
+
+.nav-links a:hover {
+  color: var(--emerald);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Install app banner */
+.install-banner {
+  background: linear-gradient(90deg, #064e3b, #047857);
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 999;
+}
+
+.banner-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.banner-content i {
+  font-size: 1.8rem;
+}
+
+.banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Landing Hero Section */
+.hero-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.hero-text h1 {
+  font-size: 3.5rem;
+  line-height: 1.2;
+  margin: 1rem 0 1.5rem 0;
+}
+
+.hero-text p {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  margin-bottom: 2.5rem;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.hero-visual {
+  position: relative;
+  height: 400px;
+}
+
+.hero-preview-card {
+  position: absolute;
+  top: 10%;
+  left: 0;
+  width: 280px;
+  z-index: 2;
+}
+
+.hero-voice-card {
+  position: absolute;
+  bottom: 10%;
+  right: 0;
+  width: 320px;
+  z-index: 3;
+}
+
+/* Preview details */
+.preview-header, .voice-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.5rem;
+}
+
+.voice-header {
+  justify-content: flex-start;
+  gap: 0.75rem;
+}
+
+.avatar-small {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--emerald);
+}
+
+.pulse-indicator {
+  font-size: 0.75rem;
+  color: var(--emerald);
+  animation: pulse-op 1.5s infinite;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* Chat bubble aesthetics */
+.chat-bubble {
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  max-width: 85%;
+  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.user-bubble {
+  background: var(--primary-light);
+  color: var(--text-main);
+  border-top-right-radius: 2px;
+  align-self: flex-end;
+  margin-left: auto;
+}
+
+.bot-bubble {
+  background: var(--secondary-light);
+  color: var(--text-main);
+  border-top-left-radius: 2px;
+}
+
+/* Feature grid section */
+.features-section, .crops-section, .faq-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 5rem 1.5rem;
+}
+
+.section-header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 3rem auto;
+}
+
+.section-header h2 {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+}
+
+.section-header p {
+  color: var(--text-muted);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.feature-card {
+  text-align: left;
+}
+
+.feature-icon {
+  width: 50px;
+  height: 50px;
+  background: var(--primary-light);
+  color: var(--emerald);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.feature-card h3 {
+  margin-bottom: 0.75rem;
+}
+
+.feature-card p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+/* Benefits Section */
+.benefits-section {
+  background: var(--primary-light);
+  padding: 5rem 1.5rem;
+}
+
+.benefits-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.benefits-visual {
+  text-align: center;
+}
+
+.benefit-img {
+  max-width: 250px;
+  filter: drop-shadow(0px 10px 20px rgba(16, 185, 129, 0.2));
+  animation: float 4s ease-in-out infinite;
+}
+
+.benefits-list {
+  list-style: none;
+}
+
+.benefits-list li {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.benefits-list li i {
+  color: var(--emerald);
+  font-size: 1.5rem;
+  margin-top: 0.25rem;
+}
+
+.benefits-list li strong {
+  font-size: 1.1rem;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.benefits-list li p {
+  color: var(--text-muted);
+}
+
+/* Crops badge scroll */
+.crops-scroll {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.crop-badge {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: var(--shadow-main);
+}
+
+/* FAQ grid */
+.faq-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.faq-card h4 {
+  margin-bottom: 0.75rem;
+}
+
+.faq-card p {
+  color: var(--text-muted);
+}
+
+/* Modal overlays (Auth) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 450px;
+  background: var(--bg-card);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 1.5rem;
+}
+
+.auth-tab-btn {
+  background: none;
+  border: none;
+  padding: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color var(--transition-speed);
+}
+
+.auth-tab-btn.active {
+  color: var(--emerald);
+  border-bottom: 2px solid var(--emerald);
+}
+
+/* Form groups */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--text-main);
+  font-family: var(--font-family);
+  outline: none;
+  transition: border-color var(--transition-speed);
+}
+
+body.dark-mode .form-input {
+  background: rgba(6, 78, 59, 0.2);
+}
+
+.form-input:focus {
+  border-color: var(--emerald);
+}
+
+.form-range {
+  width: 100%;
+  accent-color: var(--emerald);
+}
+
+.range-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+/* Dashboard Layout */
+.dashboard-layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.dashboard-sidebar {
+  width: 280px;
+  background-color: var(--bg-sidebar);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+  transition: transform var(--transition-speed);
+}
+
+.sidebar-logo {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.user-profile-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.user-info h4 {
+  font-size: 0.95rem;
+  margin-bottom: 0.1rem;
+}
+
+.role-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: var(--emerald);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  font-weight: 500;
+  opacity: 0.75;
+  transition: all var(--transition-speed);
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--primary);
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+/* Dashboard Content Area */
+.dashboard-content {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.top-status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+}
+
+.menu-toggle-btn {
+  display: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.weather-brief-widget {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Notifications dropdown */
+.notif-dropdown {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  width: 320px;
+  z-index: 100;
+  background: var(--bg-card);
+}
+
+.notif-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.notif-list {
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.notif-item {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(16, 185, 129, 0.08);
+  font-size: 0.85rem;
+}
+
+.notif-item.unread {
+  font-weight: 600;
+}
+
+/* Dashboard alerts banner */
+.alert-banner {
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--red);
+  color: var(--red);
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Panels */
+.dashboard-panel {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.panel-header {
+  margin-bottom: 2rem;
+}
+
+.panel-header h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.25rem;
+}
+
+.panel-header p {
+  color: var(--text-muted);
+}
+
+/* Dashboard Grid Overview */
+.dashboard-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-item-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+.bg-emerald-light { background-color: rgba(16, 185, 129, 0.15); }
+.bg-blue-light { background-color: rgba(59, 130, 246, 0.15); }
+.bg-yellow-light { background-color: rgba(234, 179, 8, 0.15); }
+.bg-purple-light { background-color: rgba(139, 92, 246, 0.15); }
+.bg-red-light { background-color: rgba(239, 68, 68, 0.15); }
+
+.stat-info span {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.stat-info h3 {
+  margin-bottom: 0;
+}
+
+/* Charts structure */
+.dashboard-charts-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 2rem;
+}
+
+.chart-container-card {
+  width: 100%;
+}
+
+.chart-wrapper {
+  position: relative;
+  height: 280px;
+  width: 100%;
+}
+
+/* Tables style */
+.table-card-section {
+  overflow: hidden;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  text-align: left;
+}
+
+th, td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.9rem;
+}
+
+th {
+  font-weight: 600;
+  color: var(--text-muted);
+  background-color: var(--primary-light);
+}
+
+/* Scanner Workflow Grid */
+.scanner-workflow-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 2rem;
+}
+
+.drag-upload-container {
+  border: 2px dashed var(--border-color);
+  border-radius: 12px;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background var(--transition-speed);
+  margin-bottom: 1.25rem;
+  background: rgba(16, 185, 129, 0.02);
+}
+
+.drag-upload-container:hover {
+  background: rgba(16, 185, 129, 0.06);
+}
+
+.cloud-icon {
+  font-size: 2.5rem;
+  color: var(--emerald);
+  margin-bottom: 1rem;
+}
+
+.image-preview-box {
+  position: relative;
+  width: 100%;
+  max-height: 250px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border-color);
+}
+
+.image-preview-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.remove-img-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white !important;
+}
+
+/* Image comparison overlay */
+.comparison-container-slider {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.comparison-slider-tabs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.slider-tab-btn {
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid var(--border-color);
+  background: var(--bg-app);
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+
+.slider-tab-btn.active {
+  background: var(--emerald);
+  color: white;
+}
+
+.comparison-images-wrapper {
+  position: relative;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.responsive-img {
+  width: 100%;
+  max-height: 380px;
+  object-fit: contain;
+  background: #000;
+}
+
+/* Leaf scanning animation bar */
+.scan-scanning-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 10;
+  border-radius: var(--border-radius);
+  color: white;
+  gap: 1rem;
+}
+
+.scanning-beam {
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(to bottom, transparent, var(--emerald), transparent);
+  box-shadow: 0 0 10px var(--emerald);
+  top: 0;
+  animation: scan-move 2s ease-in-out infinite;
+}
+
+.spinner {
+  width: 45px;
+  height: 45px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--emerald);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Health score visual */
+.health-score-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.health-bar-wrapper {
+  flex-grow: 1;
+  height: 8px;
+  background-color: var(--secondary-light);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.health-bar {
+  height: 100%;
+  background-color: var(--emerald);
+}
+
+.npk-ratio-display {
+  background: var(--primary-light);
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-align: center;
+  color: var(--emerald);
+}
+
+.remedy-card {
+  padding: 1rem;
+  border-radius: 10px;
+  border-left: 4px solid;
+}
+
+.remedy-card strong {
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+/* Dynamic grid layouts */
+.farming-form-grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 2rem;
+}
+
+/* Weather layout details */
+.weather-dashboard-layout {
+  display: flex;
+  flex-direction: column;
+}
+
+.weather-brief-grid {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 2rem;
+}
+
+.weather-card-item {
+  background: linear-gradient(135deg, #0f766e, #064e3b);
+  color: white;
+  border: none;
+}
+
+.weather-card-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.weather-card-inner h3 {
+  font-size: 3rem;
+  margin-bottom: 0;
+}
+
+.weather-card-icon {
+  font-size: 3.5rem;
+  color: var(--yellow);
+}
+
+.weather-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.weather-alerts-list {
+  list-style: none;
+  margin-top: 1rem;
+}
+
+.weather-alerts-list li {
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.weekly-timeline-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.weekly-forecast-card {
+  background: var(--secondary-light);
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  border-radius: 10px;
+  text-align: center;
+  transition: transform var(--transition-speed);
+}
+
+.weekly-forecast-card:hover {
+  transform: translateY(-2px);
+}
+
+.weekly-forecast-card i {
+  font-size: 1.8rem;
+  color: var(--emerald);
+  margin: 0.5rem 0;
+}
+
+/* Market crops demand row */
+.cultivation-suggestions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.cultivation-item {
+  background: var(--primary-light);
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  border-radius: 10px;
+  flex-grow: 1;
+}
+
+.market-schemes-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.schemes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.scheme-card {
+  padding: 1rem;
+  background: var(--secondary-light);
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+}
+
+.scheme-card h5 {
+  color: var(--emerald);
+  margin-bottom: 0.25rem;
+}
+
+/* Yield forecaster highlights */
+.yield-metrics-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.yield-metric-badge {
+  text-align: center;
+  padding: 1.25rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.yield-suggestions-list {
+  list-style: none;
+  padding-left: 0.5rem;
+}
+
+.yield-suggestions-list li {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  position: relative;
+  padding-left: 1.25rem;
+}
+
+.yield-suggestions-list li::before {
+  content: "✦";
+  position: absolute;
+  left: 0;
+  color: var(--emerald);
+}
+
+/* Drone console */
+.iot-console-grid {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 2rem;
+}
+
+.sensors-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.sensor-node-card {
+  padding: 1rem;
+  background: var(--secondary-light);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sensor-node-card h5 {
+  font-size: 0.95rem;
+  margin-bottom: 0.2rem;
+}
+
+.sensor-read-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--emerald);
+}
+
+/* Camera feed frame */
+.drone-camera-feed-card {
+  overflow: hidden;
+}
+
+.drone-camera-placeholder {
+  position: relative;
+  width: 100%;
+  height: 380px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.drone-feed-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.camera-lens-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.rec-label {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: #ef4444;
+  font-weight: bold;
+  font-family: monospace;
+}
+
+.gps-label {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  color: white;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.8rem;
+}
+
+.reticle-top-left {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  width: 20px;
+  height: 20px;
+  border-top: 2px solid white;
+  border-left: 2px solid white;
+}
+
+.reticle-top-right {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  width: 20px;
+  height: 20px;
+  border-top: 2px solid white;
+  border-right: 2px solid white;
+}
+
+.reticle-bottom-left {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+  width: 20px;
+  height: 20px;
+  border-bottom: 2px solid white;
+  border-left: 2px solid white;
+}
+
+.reticle-bottom-right {
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+  width: 20px;
+  height: 20px;
+  border-bottom: 2px solid white;
+  border-right: 2px solid white;
+}
+
+/* API configuration stats */
+.api-telemetry-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Floating Voice Assistant widget minimized state */
+#voice-assistant-widget {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.voice-fab {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--emerald), #047857);
+  color: white !important;
+  font-size: 1.5rem;
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+  border: none !important;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  animation: float 4s ease-in-out infinite;
+  transition: transform 0.2s;
+}
+
+.voice-fab:hover {
+  transform: scale(1.08);
+}
+
+/* Voice assistant full card panel */
+.voice-chat-container {
+  width: 380px;
+  height: 520px;
+  position: absolute;
+  bottom: 80px;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-card);
+  backdrop-filter: blur(15px);
+  padding: 1.25rem;
+  border-radius: 16px;
+  box-shadow: var(--shadow-main);
+  border: 1px solid var(--border-color);
+}
+
+.voice-chat-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.voice-agent-avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: var(--emerald);
+}
+
+.status-online {
+  font-size: 0.7rem;
+  color: var(--emerald);
+  font-weight: 600;
+}
+
+.chat-logs-area {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+/* Waveform bars */
+.waveform-animation-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  height: 40px;
+  margin-bottom: 0.5rem;
+}
+
+.wave-bar {
+  width: 4px;
+  height: 10px;
+  background-color: var(--emerald);
+  border-radius: 2px;
+}
+
+.waveform-animation-box .bar-1 { animation: jump-wave 0.8s 0.1s linear infinite; }
+.waveform-animation-box .bar-2 { animation: jump-wave 0.8s 0.3s linear infinite; }
+.waveform-animation-box .bar-3 { animation: jump-wave 0.8s 0.5s linear infinite; }
+.waveform-animation-box .bar-4 { animation: jump-wave 0.8s 0.2s linear infinite; }
+.waveform-animation-box .bar-5 { animation: jump-wave 0.8s 0.4s linear infinite; }
+.waveform-animation-box .bar-6 { animation: jump-wave 0.8s 0.6s linear infinite; }
+
+.suggested-questions-row {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.suggest-q-btn {
+  padding: 0.3rem 0.6rem;
+  background: var(--secondary-light);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  cursor: pointer;
+  color: var(--text-main);
+}
+
+.suggest-q-btn:hover {
+  background: var(--border-color);
+}
+
+.voice-chat-input-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.chat-lang-dropdown {
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-main);
+  outline: none;
+  font-size: 0.8rem;
+  width: 85px;
+}
+
+.speak-btn-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--emerald) !important;
+  border: 1px solid var(--border-color);
+}
+
+.speak-btn-circle:hover {
+  background: var(--emerald);
+  color: white !important;
+}
+
+.chat-text-field {
+  flex-grow: 1;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  outline: none;
+  background: var(--bg-card);
+  color: var(--text-main);
+  font-size: 0.85rem;
+}
+
+.send-btn-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--emerald);
+  color: white !important;
+  border: none;
+}
+
+/* CSS Keyframes */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes float-delayed {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
+}
+
+.floating-animation {
+  animation: float 5s ease-in-out infinite;
+}
+
+.floating-animation-delayed {
+  animation: float-delayed 5s ease-in-out infinite 2s;
+}
+
+@keyframes pulse-op {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes scan-move {
+  0% { top: 0%; }
+  50% { top: 100%; }
+  100% { top: 0%; }
+}
+
+@keyframes jump-wave {
+  0% { height: 10px; }
+  50% { height: 35px; }
+  100% { height: 10px; }
+}
+
+/* ==========================================
+   MOBILE RESPONSIVENESS & MEDIA QUERIES
+   ========================================== */
+@media (max-width: 992px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .hero-text {
+    text-align: center;
+  }
+  
+  .hero-ctas {
+    justify-content: center;
+  }
+  
+  .hero-visual {
+    height: 320px;
+  }
+  
+  .hero-preview-card {
+    left: 5%;
+    width: 250px;
+  }
+  
+  .hero-voice-card {
+    right: 5%;
+    width: 280px;
+  }
+  
+  .farming-form-grid, .scanner-workflow-grid, .iot-console-grid, .market-schemes-split {
+    grid-template-columns: 1fr;
+  }
+  
+  .weather-brief-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .dashboard-charts-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .faq-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-links {
+    display: none; /* Hide on mobile standard navigation header */
+  }
+  
+  .dashboard-layout {
+    flex-direction: column;
+  }
+  
+  .dashboard-sidebar {
+    width: 100%;
+    height: auto;
+    max-height: 100vh;
+    position: fixed;
+    top: 0;
+    left: -100%;
+    z-index: 1500;
+    height: 100%;
+  }
+  
+  .dashboard-sidebar.mobile-open {
+    left: 0;
+  }
+  
+  .menu-toggle-btn {
+    display: block;
+  }
+  
+  .top-status-bar {
+    margin-bottom: 1.5rem;
+  }
+  
+  .dashboard-content {
+    padding: 1rem;
+    margin-top: 0;
+  }
+  
+  .weekly-timeline-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .voice-chat-container {
+    width: calc(100vw - 40px);
+    right: -10px;
+  }
+  
+  .hero-text h1 {
+    font-size: 2.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .weekly-timeline-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+  </style>
+</head>
+<body class="light-mode">
+  
+  <!-- APP HEADER / NAVBAR (Landing Page) -->
+  <header id="main-header">
+    <div class="header-container">
+      <div class="logo">
+        <i class="fa-solid fa-leaf text-emerald"></i>
+        <span>Agri<span class="text-emerald font-bold">AI</span></span>
+      </div>
+      <nav class="nav-links">
+        <a href="#hero">Home</a>
+        <a href="#features">Features</a>
+        <a href="#benefits">Benefits</a>
+        <a href="#crops">Crops</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <div class="header-actions">
+        <button id="install-btn" class="btn btn-secondary install-app-btn" style="display: none;">
+          <i class="fa-solid fa-download"></i> Install App
+        </button>
+        <button id="theme-toggle" class="btn-icon" aria-label="Toggle Theme">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <button id="nav-login-btn" class="btn btn-primary">
+          <i class="fa-solid fa-right-to-bracket"></i> Login
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- PWA INSTALL GUIDANCE BANNER -->
+  <div id="pwa-install-banner" class="install-banner" style="display: none;">
+    <div class="banner-content">
+      <i class="fa-solid fa-mobile-screen-button"></i>
+      <div>
+        <strong>Install AgriAI App</strong>
+        <p>Add to your home screen for offline diagnostics and voice search in fields.</p>
+      </div>
+    </div>
+    <div class="banner-actions">
+      <button id="pwa-accept-btn" class="btn btn-sm btn-primary">Install</button>
+      <button id="pwa-close-btn" class="btn-icon btn-sm"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+  </div>
+
+  <!-- MAIN LANDING PAGE VIEW -->
+  <main id="landing-page-view">
+    
+    <!-- HERO SECTION -->
+    <section id="hero" class="hero-section">
+      <div class="hero-grid">
+        <div class="hero-text">
+          <span class="badge badge-emerald"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Agriculture Revolution</span>
+          <h1>Precision Farming Powered by <span class="text-gradient">Artificial Intelligence</span></h1>
+          <p>Instantly diagnose crop diseases using Computer Vision, optimize water usage, automate NPK soil advisory, and speak directly with our Voice Assistant in 11 regional languages.</p>
+          <div class="hero-ctas">
+            <button id="hero-get-started" class="btn btn-primary btn-lg">
+              Launch Dashboard <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <button id="hero-try-voice" class="btn btn-secondary btn-lg">
+              <i class="fa-solid fa-microphone"></i> Try Voice Assistant
+            </button>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="glass-card hero-preview-card floating-animation">
+            <div class="preview-header">
+              <i class="fa-solid fa-circle-nodes text-emerald"></i>
+              <span>AI Crop Telemetry</span>
+              <span class="pulse-indicator">● Active</span>
+            </div>
+            <div class="preview-body">
+              <div class="stat-row">
+                <span>Soil Moisture</span>
+                <span class="font-bold">42% (Optimal)</span>
+              </div>
+              <div class="stat-row">
+                <span>Pest Risk Status</span>
+                <span class="badge badge-success">Low</span>
+              </div>
+              <div class="stat-row">
+                <span>Next Scheduled Irrigation</span>
+                <span class="text-emerald">Tomorrow, 06:00 AM</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="glass-card hero-voice-card floating-animation-delayed">
+            <div class="voice-header">
+              <div class="avatar-small">
+                <i class="fa-solid fa-robot"></i>
+              </div>
+              <div>
+                <strong>AgriAI Assistant</strong>
+                <p class="text-xs">Offline Translation Active</p>
+              </div>
+            </div>
+            <div class="chat-bubble user-bubble">
+              "నా పత్తి పంట ఆకులు ముడుచుకుపోతున్నాయి"
+            </div>
+            <div class="chat-bubble bot-bubble">
+              "మీ పంటను లీఫ్ కర్ల్ వైరస్ ఆశించి ఉండవచ్చు. వేప నూనె పిచికారీ చేయండి."
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CORE FEATURES OVERVIEW -->
+    <section id="features" class="features-section">
+      <div class="section-header">
+        <h2>Smart Farming Core Features</h2>
+        <p>AgriAI combines 6 advanced agricultural modules on a single, easy-to-use digital platform.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card glass-card">
+          <div class="feature-icon"><i class="fa-solid fa-camera"></i></div>
+          <h3>AI Leaf Disease Scanner</h3>
+          <p>Upload leaf images. Our OpenCV segmentation models extract features and classify diseases instantly.</p>
+        </div>
+        <div class="feature-card glass-card">
+          <div class="feature-icon"><i class="fa-solid fa-flask"></i></div>
+          <h3>Soil & NPK Advisory</h3>
+          <p>Input soil variables to receive chemical calculations and organic fertilizer schedules.</p>
+        </div>
+        <div class="feature-card glass-card">
+          <div class="feature-icon"><i class="fa-solid fa-cloud-sun-rain"></i></div>
+          <h3>Weather Intelligence</h3>
+          <p>Retrieve live micro-forecasts with crop-spraying warnings and rain warnings.</p>
+        </div>
+        <div class="feature-card glass-card">
+          <div class="feature-icon"><i class="fa-solid fa-droplet"></i></div>
+          <h3>Smart Irrigation</h3>
+          <p>Minimize water wastage with structured drip scheduling built on crop dynamics.</p>
+        </div>
+        <div class="feature-card glass-card">
+          <div class="feature-icon"><i class="fa-solid fa-microphone-lines"></i></div>
+          <h3>Voice Assistant</h3>
+          <p>Ask queries out loud and receive instant voice advice translated in 11 local languages.</p>
+        </div>
+        <div class="feature-card glass-card">
+          <div class="feature-icon"><i class="fa-solid fa-chart-line"></i></div>
+          <h3>Yield Forecaster</h3>
+          <p>Estimate harvest volume per acre and get custom risk mitigation checklists.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- BENEFITS SECTION -->
+    <section id="benefits" class="benefits-section">
+      <div class="benefits-container">
+        <div class="benefits-visual">
+          <img src="https://cdn-icons-png.flaticon.com/512/628/628283.png" alt="Agriculture Leaf Icon" class="benefit-img">
+        </div>
+        <div class="benefits-content">
+          <h2>Empowering Farmers for a Sustainable Future</h2>
+          <ul class="benefits-list">
+            <li>
+              <i class="fa-solid fa-circle-check"></i>
+              <div>
+                <strong>Reduce Harvest Losses by 40%</strong>
+                <p>Early-stage crop scanning stops disease spreading before it ruins fields.</p>
+              </div>
+            </li>
+            <li>
+              <i class="fa-solid fa-circle-check"></i>
+              <div>
+                <strong>Save Up To 35% Irrigation Water</strong>
+                <p>Precise drip scheduling based on live solar metrics and moisture levels.</p>
+              </div>
+            </li>
+            <li>
+              <i class="fa-solid fa-circle-check"></i>
+              <div>
+                <strong>Say No to Over-fertilization</strong>
+                <p>Precise NPK calculations tailored to growth stages keeps soil pH healthy.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUPPORTED CROPS SECTION -->
+    <section id="crops" class="crops-section">
+      <div class="section-header">
+        <h2>Supported Crops & Diagnostics</h2>
+        <p>AgriAI is pre-trained to analyze and detect leaf diseases for 10 principal crop varieties.</p>
+      </div>
+      <div class="crops-scroll">
+        <div class="crop-badge"><i class="fa-solid fa-seedling text-emerald"></i> Tomato</div>
+        <div class="crop-badge"><i class="fa-solid fa-seedling text-emerald"></i> Paddy (Rice)</div>
+        <div class="crop-badge"><i class="fa-solid fa-seedling text-emerald"></i> Potato</div>
+        <div class="crop-badge"><i class="fa-solid fa-seedling text-emerald"></i> Cotton</div>
+        <div class="crop-badge"><i class="fa-solid fa-seedling text-emerald"></i> Wheat</div>
+        <div class="crop-badge"><i class="fa-solid fa-seedling text-emerald"></i> Maize (Corn)</div>
+        <div class="crop-badge"><i class="fa-solid fa-seedling text-emerald"></i> Banana</div>
+        <div class="crop-badge"><i class="fa-solid fa-seedling text-emerald"></i> Chili</div>
+        <div class="crop-badge"><i class="fa-solid fa-seedling text-emerald"></i> Mango</div>
+        <div class="crop-badge"><i class="fa-solid fa-seedling text-emerald"></i> Groundnut</div>
+      </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section id="faq" class="faq-section">
+      <div class="section-header">
+        <h2>Frequently Asked Questions</h2>
+        <p>Get answers to common queries about AgriAI smart tools.</p>
+      </div>
+      <div class="faq-grid">
+        <div class="faq-card glass-card">
+          <h4>Does the platform require internet?</h4>
+          <p>No, AgriAI utilizes PWA caching. You can run voice assistant keywords, check fertilizer logs, and view previous disease scans fully offline.</p>
+        </div>
+        <div class="faq-card glass-card">
+          <h4>How does the Leaf Scanner work?</h4>
+          <p>Our backend applies OpenCV to segment leaf borders, isolate lesion spots (yellowing/spots), and passes these features to a Scikit-learn Classifier.</p>
+        </div>
+        <div class="faq-card glass-card">
+          <h4>What languages are supported?</h4>
+          <p>It supports 11 languages including Telugu, Hindi, Tamil, Kannada, Malayalam, English, Bengali, Marathi, Punjabi, Gujarati, and Odia.</p>
+        </div>
+        <div class="faq-card glass-card">
+          <h4>Can I connect soil sensors?</h4>
+          <p>Yes. The dashboard comes with a Future-Ready Drone & IoT console ready to handle real telemetry feeds from hardware units.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- AUTHENTICATION DIALOG / CARD MODAL -->
+  <div id="auth-modal" class="modal-overlay" style="display: none;">
+    <div class="glass-card modal-card">
+      <div class="modal-header">
+        <h3 id="auth-title">Farmer Login</h3>
+        <button id="close-auth-btn" class="btn-icon"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      
+      <div class="auth-tabs">
+        <button id="tab-login" class="auth-tab-btn active">Sign In</button>
+        <button id="tab-register" class="auth-tab-btn">Register</button>
+      </div>
+      
+      <form id="auth-form">
+        <div class="form-group">
+          <label for="auth-username">Username</label>
+          <input type="text" id="auth-username" required placeholder="Enter username">
+        </div>
+        
+        <div class="form-group" id="group-fullname" style="display: none;">
+          <label for="auth-fullname">Full Name</label>
+          <input type="text" id="auth-fullname" placeholder="Enter your full name">
+        </div>
+        
+        <div class="form-group" id="group-role" style="display: none;">
+          <label for="auth-role">User Role</label>
+          <select id="auth-role">
+            <option value="farmer">Farmer</option>
+            <option value="expert">Agriculture Expert</option>
+            <option value="admin">System Administrator</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="auth-password">Password</label>
+          <input type="password" id="auth-password" required placeholder="Enter password">
+        </div>
+        
+        <div id="auth-error-msg" class="text-red text-sm mb-3" style="display: none;"></div>
+        
+        <button type="submit" id="auth-submit-btn" class="btn btn-primary w-full">Sign In</button>
+        
+        <div class="auth-divider" style="text-align: center; margin: 16px 0; display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--text-muted); font-size: 0.85rem;">
+          <span style="flex: 1; height: 1px; background: rgba(16, 185, 129, 0.15);"></span>
+          <span>OR</span>
+          <span style="flex: 1; height: 1px; background: rgba(16, 185, 129, 0.15);"></span>
+        </div>
+        
+        <button type="button" id="google-auth-btn" class="btn w-full" style="background: var(--bg-app); border: 1px solid var(--border-color); color: var(--text-main); display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 500; padding: 10px; border-radius: var(--border-radius); cursor: pointer; transition: background var(--transition-speed);">
+          <img src="https://lh3.googleusercontent.com/COxitl7wTBFScZ7P8vJ911wG3zhJ9321ABe9v29CO3VwORYwQ3CO6p5467R1AKGKLqTOCOr3OhPM9g" alt="Google Logo" style="width: 16px; height: 16px;" />
+          Continue with Google
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE DASHBOARD VIEW (HIDDEN BY DEFAULT) -->
+  <div id="dashboard-view" class="dashboard-layout" style="display: none;">
+    
+    <!-- SIDEBAR -->
+    <aside class="dashboard-sidebar">
+      <div class="sidebar-logo">
+        <i class="fa-solid fa-leaf text-emerald"></i>
+        <span>Agri<span class="text-emerald">AI</span></span>
+      </div>
+      <div class="user-profile-badge">
+        <div class="user-avatar"><i class="fa-solid fa-user-gear"></i></div>
+        <div class="user-info">
+          <h4 id="user-display-name">Farmer Name</h4>
+          <span id="user-display-role" class="role-badge">Role</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="sidebar-link active" data-panel="panel-home">
+          <i class="fa-solid fa-chart-pie"></i> Overview
+        </a>
+        <a href="#" class="sidebar-link" data-panel="panel-scanner">
+          <i class="fa-solid fa-qrcode"></i> Leaf Scanner
+        </a>
+        <a href="#" class="sidebar-link" data-panel="panel-fertilizer">
+          <i class="fa-solid fa-flask-vial"></i> Soil & Fertilizer
+        </a>
+        <a href="#" class="sidebar-link" data-panel="panel-irrigation">
+          <i class="fa-solid fa-faucet-drip"></i> Irrigation Plan
+        </a>
+        <a href="#" class="sidebar-link" data-panel="panel-weather">
+          <i class="fa-solid fa-temperature-quarter"></i> Weather Advisory
+        </a>
+        <a href="#" class="sidebar-link" data-panel="panel-market">
+          <i class="fa-solid fa-store"></i> Market & Schemes
+        </a>
+        <a href="#" class="sidebar-link" data-panel="panel-yield">
+          <i class="fa-solid fa-weight-hanging"></i> Yield Predictor
+        </a>
+        <a href="#" class="sidebar-link" data-panel="panel-iot">
+          <i class="fa-solid fa-helicopter"></i> Drone & IoT
+        </a>
+        <a href="#" class="sidebar-link" data-panel="panel-admin" id="nav-admin-link" style="display: none;">
+          <i class="fa-solid fa-user-shield"></i> Admin Panel
+        </a>
+        <a href="#" class="sidebar-link" data-panel="panel-settings">
+          <i class="fa-solid fa-sliders"></i> Settings
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <button id="logout-btn" class="btn btn-secondary w-full">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- DASHBOARD VIEWPORT -->
+    <main class="dashboard-content">
+      
+      <!-- TOP STATUS BAR -->
+      <div class="top-status-bar">
+        <div class="menu-toggle-btn"><i class="fa-solid fa-bars"></i></div>
+        <div class="weather-brief-widget" id="weather-summary-bar">
+          <i class="fa-solid fa-sun text-yellow"></i> Loading weather...
+        </div>
+        <div class="notifications-bell-dropdown">
+          <button id="bell-btn" class="btn-icon position-relative">
+            <i class="fa-solid fa-bell"></i>
+            <span id="notif-badge" class="badge-dot" style="display: none;"></span>
+          </button>
+          <div id="notif-panel" class="glass-card notif-dropdown" style="display: none;">
+            <div class="notif-header">
+              <h4>Farming Notifications</h4>
+              <button id="notif-clear-btn" class="btn-text">Clear All</button>
+            </div>
+            <div id="notif-list-container" class="notif-list">
+              <p class="text-xs text-center p-3">No new notifications</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ALERTS BANNER -->
+      <div id="dashboard-alert-banner" class="alert-banner" style="display: none;">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <span id="alert-banner-text">Alert text</span>
+        <button id="alert-banner-close" class="btn-icon"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- PANEL 1: OVERVIEW -->
+      <div id="panel-home" class="dashboard-panel">
+        <div class="panel-header">
+          <h2>Farming Command Center</h2>
+          <p>Real-time analytics, weather forecasts, and satellite statistics.</p>
+        </div>
+        
+        <!-- Summary widgets -->
+        <div class="dashboard-stats-grid">
+          <div class="glass-card stat-item-card">
+            <div class="stat-icon bg-emerald-light"><i class="fa-solid fa-qrcode text-emerald"></i></div>
+            <div class="stat-info">
+              <span>Total Leaf Scans</span>
+              <h3 id="stat-scans">0</h3>
+            </div>
+          </div>
+          <div class="glass-card stat-item-card">
+            <div class="stat-icon bg-blue-light"><i class="fa-solid fa-droplet text-blue"></i></div>
+            <div class="stat-info">
+              <span>Water Saving Ratio</span>
+              <h3 id="stat-water">0%</h3>
+            </div>
+          </div>
+          <div class="glass-card stat-item-card">
+            <div class="stat-icon bg-yellow-light"><i class="fa-solid fa-circle-exclamation text-yellow"></i></div>
+            <div class="stat-info">
+              <span>Soil Health Index</span>
+              <h3>78/100</h3>
+            </div>
+          </div>
+          <div class="glass-card stat-item-card">
+            <div class="stat-icon bg-purple-light"><i class="fa-solid fa-helicopter text-purple"></i></div>
+            <div class="stat-info">
+              <span>IoT Devices connected</span>
+              <h3 id="stat-iot">Online</h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts grid -->
+        <div class="dashboard-charts-grid">
+          <div class="glass-card chart-container-card">
+            <h4>Crop Production Trends (Tons/Acre)</h4>
+            <div class="chart-wrapper">
+              <canvas id="yieldChart"></canvas>
+            </div>
+          </div>
+          <div class="glass-card chart-container-card">
+            <h4>Regional Fungal Disease Occurrence</h4>
+            <div class="chart-wrapper">
+              <canvas id="diseaseChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent activities -->
+        <div class="glass-card table-card-section mt-5">
+          <h4>Recent Diagnosis Log</h4>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Crop</th>
+                  <th>Disease Diagnostic</th>
+                  <th>Severity</th>
+                  <th>Confidence</th>
+                  <th>Scan Date</th>
+                </tr>
+              </thead>
+              <tbody id="dashboard-recent-scans-tbody">
+                <tr>
+                  <td colspan="5" class="text-center">No scans found. Use the Leaf Scanner to diagnose crops.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 2: LEAF SCANNER -->
+      <div id="panel-scanner" class="dashboard-panel" style="display: none;">
+        <div class="panel-header">
+          <h2>AI Leaf Disease Scanner</h2>
+          <p>Snap a photo or drag-and-drop crop leaves to detect plant diseases using computer vision.</p>
+        </div>
+        
+        <div class="scanner-workflow-grid">
+          
+          <!-- Scan Controller Card -->
+          <div class="glass-card control-scan-card">
+            <div class="form-group">
+              <label for="scan-crop-select">Crop Variety</label>
+              <select id="scan-crop-select" class="form-input">
+                <option value="Tomato">Tomato</option>
+                <option value="Paddy">Paddy (Rice)</option>
+                <option value="Potato">Potato</option>
+                <option value="Cotton">Cotton</option>
+                <option value="Wheat">Wheat</option>
+                <option value="Maize">Maize (Corn)</option>
+                <option value="Banana">Banana</option>
+                <option value="Chili">Chili</option>
+                <option value="Mango">Mango</option>
+                <option value="Groundnut">Groundnut</option>
+              </select>
+            </div>
+            
+            <div class="drag-upload-container" id="drag-drop-zone">
+              <i class="fa-solid fa-cloud-arrow-up cloud-icon"></i>
+              <p>Drag and drop crop leaves here or click to upload</p>
+              <span class="text-xs text-secondary">Supports PNG, JPG, JPEG (Max 10MB)</span>
+              <input type="file" id="scan-file-input" style="display: none;" accept="image/*">
+            </div>
+
+            <div class="camera-button-row">
+              <button id="camera-trigger-btn" class="btn btn-secondary w-full">
+                <i class="fa-solid fa-camera"></i> Use Mobile Camera
+              </button>
+            </div>
+
+            <div id="scanner-preview-container" class="image-preview-box" style="display: none;">
+              <img id="scanner-preview-img" src="" alt="Uploaded leaf preview">
+              <button id="clear-preview-btn" class="btn-icon remove-img-btn"><i class="fa-solid fa-circle-xmark"></i></button>
+            </div>
+
+            <button id="run-scan-btn" class="btn btn-primary w-full mt-4" disabled>
+              <i class="fa-solid fa-wand-magic-sparkles"></i> Perform AI Diagnostics
+            </button>
+          </div>
+
+          <!-- Scan Result display -->
+          <div class="glass-card result-scan-card" id="scan-result-card" style="display: none;">
+            <div class="scan-scanning-overlay" id="scanning-loader" style="display: none;">
+              <div class="spinner"></div>
+              <div class="scanning-beam"></div>
+              <p>Analyzing contours and color histograms...</p>
+            </div>
+
+            <div id="scan-result-details">
+              <div class="result-header">
+                <div>
+                  <h3 id="res-disease-name">Tomato Late Blight</h3>
+                  <span id="res-severity-badge" class="badge badge-error">High Severity</span>
+                </div>
+                <div class="confidence-circle-box">
+                  <div class="percent-val" id="res-confidence">92%</div>
+                  <div class="percent-label">Confidence</div>
+                </div>
+              </div>
+
+              <!-- OpenCV output split view (before / after overlay slider) -->
+              <div class="comparison-container-slider mt-4">
+                <div class="comparison-slider-tabs">
+                  <button class="slider-tab-btn active" data-view="annotated">OpenCV Lesion Highlights</button>
+                  <button class="slider-tab-btn" data-view="heatmap">OpenCV Fungal Heatmap</button>
+                  <button class="slider-tab-btn" data-view="original">Original Image</button>
+                </div>
+                <div class="comparison-images-wrapper">
+                  <img id="res-view-img" src="" alt="Result image" class="responsive-img rounded-lg shadow">
+                </div>
+              </div>
+
+              <!-- Diagnosis suggestions -->
+              <div class="diagnosis-advice-tabs mt-4">
+                <div class="advice-card bg-emerald-light border-emerald">
+                  <h5>🌱 Organic Remedy</h5>
+                  <p id="res-organic-remedy">Spray copper mixture</p>
+                </div>
+                <div class="advice-card bg-blue-light border-blue mt-3">
+                  <h5>🧪 Chemical Remedy</h5>
+                  <p id="res-chemical-remedy">Apply Mancozeb</p>
+                </div>
+                <div class="advice-card bg-yellow-light border-yellow mt-3">
+                  <h5>🛡️ Prevention Strategy</h5>
+                  <p id="res-prevention">Keep field dry</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 3: FERTILIZER & SOIL -->
+      <div id="panel-fertilizer" class="dashboard-panel" style="display: none;">
+        <div class="panel-header">
+          <h2>Precision Fertilizer & Soil Advisory</h2>
+          <p>Compute tailored chemical NPK dosages and organic substitutes to protect soil quality.</p>
+        </div>
+        
+        <div class="farming-form-grid">
+          <div class="glass-card form-inputs-card">
+            <form id="fertilizer-form">
+              <div class="form-group">
+                <label for="fert-crop">Target Crop</label>
+                <select id="fert-crop" class="form-input">
+                  <option value="Tomato">Tomato</option>
+                  <option value="Paddy">Paddy (Rice)</option>
+                  <option value="Potato">Potato</option>
+                  <option value="Cotton">Cotton</option>
+                  <option value="Wheat">Wheat</option>
+                  <option value="Maize">Maize (Corn)</option>
+                  <option value="Banana">Banana</option>
+                  <option value="Chili">Chili</option>
+                  <option value="Mango">Mango</option>
+                  <option value="Groundnut">Groundnut</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="fert-soil">Soil Texture Type</label>
+                <select id="fert-soil" class="form-input">
+                  <option value="Loamy">Loamy Soil</option>
+                  <option value="Clayey">Clayey Soil</option>
+                  <option value="Sandy">Sandy Soil</option>
+                  <option value="Black Soil">Black Cotton Soil</option>
+                  <option value="Alluvial">Alluvial Soil</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="fert-ph">Soil pH Level: <span id="ph-val-display" class="font-bold text-emerald">6.5</span></label>
+                <input type="range" id="fert-ph" min="4.0" max="9.0" step="0.1" value="6.5" class="form-range">
+                <div class="range-labels">
+                  <span>Acidic (4.0)</span>
+                  <span>Neutral (7.0)</span>
+                  <span>Alkaline (9.0)</span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="fert-moisture">Current Soil Moisture: <span id="moisture-val-display" class="font-bold text-emerald">45%</span></label>
+                <input type="range" id="fert-moisture" min="10" max="90" step="1" value="45" class="form-range">
+                <div class="range-labels">
+                  <span>Dry (10%)</span>
+                  <span>Saturated (90%)</span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="fert-stage">Growth Stage</label>
+                <select id="fert-stage" class="form-input">
+                  <option value="Sowing">Sowing / Seedling</option>
+                  <option value="Vegetative">Active Vegetative Growth</option>
+                  <option value="Flowering">Flowering Stage</option>
+                  <option value="Fruiting">Fruiting / Tuber Bulking</option>
+                  <option value="Maturity">Maturity / Harvest Ready</option>
+                </select>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-full mt-4">Compute NPK Recommendation</button>
+            </form>
+          </div>
+
+          <div class="glass-card form-results-card" id="fertilizer-result-card" style="display: none;">
+            <h4>Calculated Nutrient Matrix</h4>
+            
+            <div class="health-score-container mt-4">
+              <span>Soil Health Scoring</span>
+              <div class="health-bar-wrapper">
+                <div id="fert-health-score-bar" class="health-bar" style="width: 75%;"></div>
+              </div>
+              <span class="font-bold" id="fert-health-score-text">75/100</span>
+            </div>
+
+            <div class="npk-ratio-display mt-4" id="fert-npk-ratio">
+              Recommended Ratio: 80-60-80 kg/hectare.
+            </div>
+
+            <div class="remedy-card border-emerald bg-emerald-light mt-4">
+              <strong>🧪 Primary Fertilizer choice:</strong>
+              <p id="fert-primary">NPK 12-32-16 & Calcium Nitrate</p>
+            </div>
+
+            <div class="remedy-card border-blue bg-blue-light mt-3">
+              <strong>🌿 Eco-friendly organic alternative:</strong>
+              <p id="fert-organic">Bone meal & wood ash</p>
+            </div>
+
+            <div class="remedy-card border-yellow bg-yellow-light mt-3">
+              <strong>⚖️ Quantity & Usage:</strong>
+              <p id="fert-qty">Apply 30 kg/acre near roots early morning.</p>
+            </div>
+
+            <div class="remedy-card border-red bg-red-light mt-3" id="fert-warning-box">
+              <strong>⚠️ Risks & Warnings:</strong>
+              <p id="fert-warnings">Soil is dry. Avoid heavy urea application.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 4: IRRIGATION PLANNER -->
+      <div id="panel-irrigation" class="dashboard-panel" style="display: none;">
+        <div class="panel-header">
+          <h2>Smart Irrigation Planning</h2>
+          <p>Calculate crop hydration schedules to reduce water consumption up to 35%.</p>
+        </div>
+        
+        <div class="farming-form-grid">
+          <div class="glass-card form-inputs-card">
+            <form id="irrigation-form">
+              <div class="form-group">
+                <label for="irri-crop">Target Crop</label>
+                <select id="irri-crop" class="form-input">
+                  <option value="Tomato">Tomato</option>
+                  <option value="Paddy">Paddy (Rice)</option>
+                  <option value="Potato">Potato</option>
+                  <option value="Cotton">Cotton</option>
+                  <option value="Wheat">Wheat</option>
+                  <option value="Maize">Maize (Corn)</option>
+                  <option value="Banana">Banana</option>
+                  <option value="Chili">Chili</option>
+                  <option value="Mango">Mango</option>
+                  <option value="Groundnut">Groundnut</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="irri-moisture">Soil Moisture Level: <span id="irri-moisture-display" class="font-bold text-emerald">35%</span></label>
+                <input type="range" id="irri-moisture" min="5" max="95" value="35" class="form-range">
+              </div>
+
+              <div class="form-group">
+                <label for="irri-temp">Air Temperature: <span id="irri-temp-display" class="font-bold text-emerald">32°C</span></label>
+                <input type="range" id="irri-temp" min="10" max="50" value="32" class="form-range">
+              </div>
+
+              <div class="form-group">
+                <label for="irri-water">Water Availability</label>
+                <select id="irri-water" class="form-input">
+                  <option value="Adequate">Adequate Supply (Borewell/Canal)</option>
+                  <option value="Limited">Scarse / Limited Supply</option>
+                  <option value="Rainfed">Rainfed Only (No local storage)</option>
+                </select>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-full mt-4">Generate Irrigation Plan</button>
+            </form>
+          </div>
+
+          <div class="glass-card form-results-card" id="irrigation-result-card" style="display: none;">
+            <div class="result-header">
+              <h4>Irrigation Advisory</h4>
+              <span id="irri-status" class="badge badge-error">Irrigation Required</span>
+            </div>
+
+            <div class="metric-highlights mt-4">
+              <div class="metric-highlight-item">
+                <i class="fa-solid fa-bucket text-blue"></i>
+                <div>
+                  <strong>Water Quantity</strong>
+                  <p id="irri-qty">15,000 Liters / Acre</p>
+                </div>
+              </div>
+              <div class="metric-highlight-item mt-3">
+                <i class="fa-solid fa-clock text-emerald"></i>
+                <div>
+                  <strong>Best Timing</strong>
+                  <p id="irri-time">05:00 AM - 08:00 AM</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="remedy-card border-blue bg-blue-light mt-4">
+              <strong>💧 Recommended Method:</strong>
+              <p id="irri-method">Drip Irrigation</p>
+            </div>
+
+            <div class="remedy-card border-emerald bg-emerald-light mt-3">
+              <strong>🛠️ Drip Setup Guidelines:</strong>
+              <p id="irri-drip">Run drip line for 45 minutes on alternative days.</p>
+            </div>
+
+            <div class="remedy-card border-yellow bg-yellow-light mt-3">
+              <strong>💡 Water-Saving Tips:</strong>
+              <p id="irri-saving">Add straw mulch around plants to cut evaporation loss.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 5: WEATHER ADVISORY -->
+      <div id="panel-weather" class="dashboard-panel" style="display: none;">
+        <div class="panel-header">
+          <h2>Smart Weather Advisory</h2>
+          <p>Retrieve regional telemetry forecasts and AI-generated farm action guides.</p>
+        </div>
+        
+        <div class="weather-dashboard-layout">
+          
+          <!-- Live cards -->
+          <div class="weather-brief-grid">
+            <div class="glass-card weather-card-item">
+              <div class="weather-card-inner">
+                <div>
+                  <h3 id="weather-temp">--°C</h3>
+                  <p id="weather-desc">Loading...</p>
+                </div>
+                <div class="weather-card-icon" id="weather-icon-div">
+                  <i class="fa-solid fa-cloud-sun"></i>
+                </div>
+              </div>
+              <div class="weather-meta mt-4">
+                <span>Humidity: <strong id="weather-humidity">--%</strong></span>
+                <span>Wind Speed: <strong id="weather-wind">-- km/h</strong></span>
+              </div>
+            </div>
+            
+            <div class="glass-card weather-alerts-card">
+              <h4>⚠️ Crop Management Advisories</h4>
+              <ul class="weather-alerts-list" id="weather-advisory-list">
+                <li>Retrieving live forecasts from regional servers...</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Weekly forecast timeline -->
+          <div class="glass-card weekly-forecast-section mt-5">
+            <h4>5-Day Agricultural Forecast</h4>
+            <div class="weekly-timeline-grid" id="weekly-forecast-grid">
+              <!-- JS Injected -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 6: MARKET & SCHEMES -->
+      <div id="panel-market" class="dashboard-panel" style="display: none;">
+        <div class="panel-header">
+          <h2>Government Schemes & Market Prices</h2>
+          <p>Stay up to date with crop valuation metrics, loan benefits, and subsidies.</p>
+        </div>
+        
+        <!-- High demand suggestions -->
+        <div class="glass-card p-4 mb-4">
+          <h4>💡 Smart Crop Cultivation Recommendation</h4>
+          <p class="text-secondary text-sm">Based on current market demands, soil indices, and upcoming seasonal parameters.</p>
+          <div class="cultivation-suggestions-row mt-3" id="crop-suggestions-box">
+            <!-- JS Injected -->
+          </div>
+        </div>
+
+        <div class="market-schemes-split mt-4">
+          <!-- Prices Table -->
+          <div class="glass-card table-card-section">
+            <h4>Live Mandi Market Prices</h4>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Crop Name</th>
+                    <th>Average Price</th>
+                    <th>Regional Mandi</th>
+                    <th>Price Trend</th>
+                  </tr>
+                </thead>
+                <tbody id="market-prices-tbody">
+                  <!-- JS Injected -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Schemes catalog -->
+          <div class="glass-card schemes-catalog-section">
+            <h4>Government Subsidy & Loan Schemes</h4>
+            <div class="schemes-list" id="government-schemes-box">
+              <!-- JS Injected -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 7: YIELD PREDICTOR -->
+      <div id="panel-yield" class="dashboard-panel" style="display: none;">
+        <div class="panel-header">
+          <h2>AI Yield Forecaster</h2>
+          <p>Provide agronomic data to estimate total harvest quantity per acre and mitigate cultivation risks.</p>
+        </div>
+        
+        <div class="farming-form-grid">
+          <div class="glass-card form-inputs-card">
+            <form id="yield-form">
+              <div class="form-group">
+                <label for="yield-crop">Target Crop</label>
+                <select id="yield-crop" class="form-input">
+                  <option value="Tomato">Tomato</option>
+                  <option value="Paddy">Paddy (Rice)</option>
+                  <option value="Potato">Potato</option>
+                  <option value="Cotton">Cotton</option>
+                  <option value="Wheat">Wheat</option>
+                  <option value="Maize">Maize (Corn)</option>
+                  <option value="Banana">Banana</option>
+                  <option value="Chili">Chili</option>
+                  <option value="Mango">Mango</option>
+                  <option value="Groundnut">Groundnut</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="yield-soil">Soil Type</label>
+                <select id="yield-soil" class="form-input">
+                  <option value="Loamy">Loamy</option>
+                  <option value="Clayey">Clayey</option>
+                  <option value="Sandy">Sandy</option>
+                  <option value="Black Soil">Black Soil</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="yield-moisture">Average Field Moisture: <span id="yield-moisture-display" class="font-bold text-emerald">50%</span></label>
+                <input type="range" id="yield-moisture" min="10" max="90" value="50" class="form-range">
+              </div>
+
+              <div class="form-group">
+                <label for="yield-history">Disease History (This Season)</label>
+                <select id="yield-history" class="form-input">
+                  <option value="none">Healthy / No Disease occurrences</option>
+                  <option value="medium">Mild (Occasional fungal leaf spots)</option>
+                  <option value="high">Severe (Frequent blight / crop damage)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="yield-fertilizer">Fertilizer Application</label>
+                <select id="yield-fertilizer" class="form-input">
+                  <option value="balanced">Balanced NPK (Organic & Chemical combination)</option>
+                  <option value="underuse">Under-fertilized (Low nutrient feeds)</option>
+                  <option value="overuse">Overuse (Excessive Urea/Nitrogen application)</option>
+                </select>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-full mt-4">Forecast Expected Yield</button>
+            </form>
+          </div>
+
+          <div class="glass-card form-results-card" id="yield-result-card" style="display: none;">
+            <h4>Estimated Crop Yield Projections</h4>
+            
+            <div class="yield-metrics-box mt-4">
+              <div class="yield-metric-badge">
+                <span class="text-xs uppercase text-secondary">Expected Volume</span>
+                <h2 id="yield-expected">-- Tons/Acre</h2>
+              </div>
+              <div class="yield-metric-badge border-emerald bg-emerald-light">
+                <span class="text-xs uppercase text-emerald">Potential Volume</span>
+                <h2 id="yield-potential" class="text-emerald">-- Tons/Acre</h2>
+              </div>
+            </div>
+
+            <div class="remedy-card border-red bg-red-light mt-4">
+              <strong>🛡️ Cultivation Risk Analysis:</strong>
+              <p id="yield-risks">Analyzing soil parameters...</p>
+            </div>
+
+            <div class="remedy-card border-emerald bg-emerald-light mt-3">
+              <strong>💡 Productivity Improvement Actions:</strong>
+              <ul class="yield-suggestions-list" id="yield-suggestions-ul">
+                <li>Load yield factors to generate customized practices.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 8: DRONE & IOT CONTROL -->
+      <div id="panel-iot" class="dashboard-panel" style="display: none;">
+        <div class="panel-header">
+          <h2>Drone & IoT Integration Console</h2>
+          <p>Monitor real-time sensor array parameters, battery levels, and automatic drone scouting flights.</p>
+        </div>
+        
+        <div class="iot-console-grid">
+          
+          <!-- Control Panel -->
+          <div class="glass-card iot-status-card">
+            <h4>📡 Network Telemetry Summary</h4>
+            <div class="stat-row mt-4">
+              <span>Drone Connection Status</span>
+              <span class="badge badge-success" id="iot-drone-status">Online</span>
+            </div>
+            <div class="stat-row">
+              <span>Drone Battery Reserve</span>
+              <span id="iot-drone-battery">85%</span>
+            </div>
+            <div class="stat-row">
+              <span>Active Quadcopters</span>
+              <span id="iot-drone-active">2 Units</span>
+            </div>
+            <div class="stat-row">
+              <span>Satellite Calibration</span>
+              <span id="iot-satellite">Synchronized</span>
+            </div>
+            <div class="stat-row">
+              <span>Smart Valves Relay</span>
+              <span class="text-emerald">Ready (Auto)</span>
+            </div>
+
+            <div class="drone-actions-row mt-5">
+              <button class="btn btn-primary w-full mb-3" onclick="alert('Drone flight path scouting initiated. Fetching thermal mapping contours...')">
+                <i class="fa-solid fa-plane-departure"></i> Launch Drone Crop Survey
+              </button>
+              <button class="btn btn-secondary w-full" onclick="alert('Relay valve override triggered. Flushing drip irrigation pipelines for 5 minutes...')">
+                <i class="fa-solid fa-gears"></i> Trigger Irrigation Flush
+              </button>
+            </div>
+          </div>
+
+          <!-- Sensors list -->
+          <div class="glass-card iot-sensors-card">
+            <h4>🌱 Active Soil Sensor Node Array</h4>
+            <div class="sensors-grid mt-4" id="iot-sensors-container">
+              <!-- JS Injected -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Drone camera feed simulation -->
+        <div class="glass-card mt-5 drone-camera-feed-card">
+          <h4>📷 Drone Live NDVI Imaging Feed</h4>
+          <div class="drone-camera-placeholder">
+            <div class="scanner-beam"></div>
+            <div class="camera-lens-overlay">
+              <span class="reticle-top-left"></span>
+              <span class="reticle-top-right"></span>
+              <span class="reticle-bottom-left"></span>
+              <span class="reticle-bottom-right"></span>
+              <span class="rec-label">🔴 REC [HD]</span>
+              <span class="gps-label" id="drone-gps-label">LAT: 16.3082 | LON: 80.4529 | ALT: 25m</span>
+            </div>
+            <img src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1200&q=80" alt="Drone farm view" class="drone-feed-img">
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 9: ADMIN PANEL (SHOWN FOR ADMIN/EXPERT) -->
+      <div id="panel-admin" class="dashboard-panel" style="display: none;">
+        <div class="panel-header">
+          <h2>System Admin & Expert Panel</h2>
+          <p>Monitor platform statistics, active API latencies, and manage user role configurations.</p>
+        </div>
+        
+        <div class="dashboard-stats-grid">
+          <div class="glass-card stat-item-card">
+            <div class="stat-icon bg-emerald-light"><i class="fa-solid fa-users text-emerald"></i></div>
+            <div class="stat-info">
+              <span>Total Platform Users</span>
+              <h3 id="admin-stat-users">--</h3>
+            </div>
+          </div>
+          <div class="glass-card stat-item-card">
+            <div class="stat-icon bg-blue-light"><i class="fa-solid fa-user-doctor text-blue"></i></div>
+            <div class="stat-info">
+              <span>Active Experts</span>
+              <h3 id="admin-stat-experts">--</h3>
+            </div>
+          </div>
+          <div class="glass-card stat-item-card">
+            <div class="stat-icon bg-yellow-light"><i class="fa-solid fa-server text-yellow"></i></div>
+            <div class="stat-info">
+              <span>Server Load CPU</span>
+              <h3 id="admin-stat-cpu">--</h3>
+            </div>
+          </div>
+          <div class="glass-card stat-item-card">
+            <div class="stat-icon bg-purple-light"><i class="fa-solid fa-memory text-purple"></i></div>
+            <div class="stat-info">
+              <span>Server Memory</span>
+              <h3 id="admin-stat-memory">--</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="market-schemes-split mt-4">
+          <!-- API Latency widgets -->
+          <div class="glass-card p-4">
+            <h4>📡 API Service Integrations Latencies</h4>
+            <div class="api-telemetry-list mt-3">
+              <div class="stat-row">
+                <span>Open-Meteo Weather API</span>
+                <span class="text-emerald" id="admin-api-meteo">Online</span>
+              </div>
+              <div class="stat-row">
+                <span>Web Speech Synthesis API</span>
+                <span class="text-emerald">Browser Ready</span>
+              </div>
+              <div class="stat-row">
+                <span>Google Translation Proxy</span>
+                <span class="text-emerald" id="admin-api-translate">Online</span>
+              </div>
+              <div class="stat-row">
+                <span>Image Diagnostics Pipeline</span>
+                <span class="text-emerald">Online (cv2 Active)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Diagnostic analytics summary -->
+          <div class="glass-card p-4">
+            <h4>💡 Platform Utilization Stats</h4>
+            <div class="api-telemetry-list mt-3">
+              <div class="stat-row">
+                <span>Active Crop Farmers</span>
+                <strong id="admin-stat-farmers">--</strong>
+              </div>
+              <div class="stat-row">
+                <span>Crop Photos Analyzed</span>
+                <strong id="admin-stat-scans">--</strong>
+              </div>
+              <div class="stat-row">
+                <span>Voice Queries Managed</span>
+                <strong id="admin-stat-chats">--</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 10: SETTINGS -->
+      <div id="panel-settings" class="dashboard-panel" style="display: none;">
+        <div class="panel-header">
+          <h2>Application Settings</h2>
+          <p>Set translation preferences, credentials, and toggle Gemini generative models.</p>
+        </div>
+        
+        <div class="glass-card p-5 max-w-lg">
+          <h4>⚙️ Configuration Console</h4>
+          
+          <div class="form-group mt-4">
+            <label for="settings-language">Interface & Voice Language</label>
+            <select id="settings-language" class="form-input">
+              <option value="en">English</option>
+              <option value="te">Telugu (తెలుగు)</option>
+              <option value="hi">Hindi (हिन्दी)</option>
+              <option value="ta">Tamil (தமிழ்)</option>
+              <option value="kn">Kannada (ಕನ್ನಡ)</option>
+              <option value="ml">Malayalam (മലയാളം)</option>
+              <option value="bn">Bengali (বাংলা)</option>
+              <option value="mr">Marathi (मराठी)</option>
+              <option value="pa">Punjabi (ਪੰਜਾਬੀ)</option>
+              <option value="gu">Gujarati (ગુજરાતી)</option>
+              <option value="or">Odia (ଓଡ଼ିଆ)</option>
+            </select>
+          </div>
+
+          <div class="form-group mt-4">
+            <label for="settings-gemini-key">Gemini AI API Key (Optional)</label>
+            <input type="password" id="settings-gemini-key" class="form-input" placeholder="AI key for advanced conversational models">
+            <small class="text-secondary text-xs mt-1 block">Leave empty to use the local translated keyword fallback model.</small>
+          </div>
+
+          <div class="form-group mt-4">
+            <label for="settings-theme">Visual Layout Theme</label>
+            <select id="settings-theme" class="form-input">
+              <option value="light">Eco Bright Theme (Light)</option>
+              <option value="dark">Emerald Night Theme (Dark)</option>
+            </select>
+          </div>
+
+          <button id="save-settings-btn" class="btn btn-primary w-full mt-5">Save Preferences</button>
+        </div>
+      </div>
+      
+    </main>
+  </div>
+
+  <!-- FLOATING VOICE ASSISTANT CHAT WIDGET -->
+  <div id="voice-assistant-widget" class="voice-widget-minimized">
+    <button id="voice-widget-toggle" class="btn-icon voice-fab">
+      <i class="fa-solid fa-microphone"></i>
+    </button>
+    
+    <div id="voice-chat-panel" class="glass-card voice-chat-container" style="display: none;">
+      <div class="voice-chat-header">
+        <div class="voice-agent-avatar">
+          <i class="fa-solid fa-robot"></i>
+        </div>
+        <div>
+          <h4>AgriAI Voice Assistant</h4>
+          <span class="status-online">● Online</span>
+        </div>
+        <button id="close-voice-panel-btn" class="btn-icon"><i class="fa-solid fa-minus"></i></button>
+      </div>
+
+      <div class="chat-logs-area" id="chat-messages-container">
+        <div class="chat-bubble bot-bubble">
+          Hello! I am AgriAI Assistant. Select your language and click the microphone to speak, or type your question below.
+        </div>
+      </div>
+
+      <!-- Waveform animation -->
+      <div class="waveform-animation-box" id="speech-waveform" style="display: none;">
+        <span class="wave-bar bar-1"></span>
+        <span class="wave-bar bar-2"></span>
+        <span class="wave-bar bar-3"></span>
+        <span class="wave-bar bar-4"></span>
+        <span class="wave-bar bar-5"></span>
+        <span class="wave-bar bar-6"></span>
+      </div>
+
+      <div class="suggested-questions-row" id="chat-suggestions-box">
+        <button class="suggest-q-btn" data-q="What is the price of Guntur chili today?">Chili price?</button>
+        <button class="suggest-q-btn" data-q="My tomato leaf has yellow spots. What to do?">Leaf yellow spots?</button>
+        <button class="suggest-q-btn" data-q="Is rain expected today?">Rain today?</button>
+      </div>
+
+      <div class="voice-chat-input-controls">
+        <select id="chat-language-select" class="chat-lang-dropdown">
+          <option value="en">English</option>
+          <option value="te">తెలుగు</option>
+          <option value="hi">हिन्दी</option>
+          <option value="ta">தமிழ்</option>
+          <option value="kn">ಕನ್ನಡ</option>
+          <option value="ml">മലയാളം</option>
+          <option value="bn">বাংলা</option>
+          <option value="mr">మరాఠీ</option>
+          <option value="pa">ਪੰਜਾਬੀ</option>
+          <option value="gu">ગુજરાતી</option>
+          <option value="or">ଓଡ଼ିଆ</option>
+        </select>
+        
+        <button id="mic-trigger-btn" class="btn-icon speak-btn-circle" title="Speak to assistant">
+          <i class="fa-solid fa-microphone"></i>
+        </button>
+        
+        <input type="text" id="chat-text-input" placeholder="Type farming question..." class="chat-text-field">
+        
+        <button id="chat-send-btn" class="btn-icon send-btn-circle">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Javascript Main logic -->
+  <!-- Inline Frontend Engine (SPA JS Controller) -->
+  <script>
+/* ==========================================
+   AGRIAI FRONTEND ENGINE (SPA JS CONTROLLER)
+   ========================================== */
+
+// --- Supabase Client Initialization ---
+const supabaseUrl = 'https://fegjbugggonjsscmdawe.supabase.co';
+const supabaseKey = 'sb_publishable_xjNCy3WZMbO0k32WLTCjng_70V5FOAT';
+const supabaseClient = window.supabase ? window.supabase.createClient(supabaseUrl, supabaseKey) : null;
+
+// --- Global App State ---
+const state = {
+  token: localStorage.getItem('agriai_token') || null,
+  user: JSON.parse(localStorage.getItem('agriai_user')) || null,
+  language: localStorage.getItem('agriai_lang') || 'en',
+  geminiKey: localStorage.getItem('agriai_gemini_key') || '',
+  theme: localStorage.getItem('agriai_theme') || 'light',
+  currentLocation: { lat: 16.30, lon: 80.45 }, // Default: Guntur, AP
+  pwaPrompt: null,
+  activeScanUrls: { original: '', annotated: '', heatmap: '' },
+  charts: { yield: null, disease: null }
+};
+
+// --- API Helpers ---
+const api = {
+  headers() {
+    const headers = { 'Content-Type': 'application/json' };
+    if (state.token) {
+      headers['Authorization'] = `Bearer ${state.token}`;
+    }
+    if (state.geminiKey) {
+      headers['X-Gemini-Key'] = state.geminiKey;
+    }
+    headers['X-Language'] = state.language || 'en';
+    return headers;
+  },
+
+  async post(url, body) {
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: this.headers(),
+        body: JSON.stringify(body)
+      });
+      return await response.json();
+    } catch (e) {
+      console.error(`POST Error on ${url}:`, e);
+      throw e;
+    }
+  },
+
+  async get(url) {
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: this.headers()
+      });
+      return await response.json();
+    } catch (e) {
+      console.error(`GET Error on ${url}:`, e);
+      throw e;
+    }
+  }
+};
+
+// --- Speech Recognition & Synthesis APIs ---
+const VoiceEngine = {
+  recognition: null,
+  isListening: false,
+  synth: window.speechSynthesis,
+  
+  // Language locale mapping
+  locales: {
+    en: 'en-US', te: 'te-IN', hi: 'hi-IN', ta: 'ta-IN', kn: 'kn-IN',
+    ml: 'ml-IN', bn: 'bn-IN', mr: 'mr-IN', pa: 'pa-IN', gu: 'gu-IN', or: 'or-IN'
+  },
+
+  init() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      this.recognition = new SpeechRecognition();
+      this.recognition.continuous = false;
+      this.recognition.interimResults = false;
+      
+      this.recognition.onstart = () => {
+        this.isListening = true;
+        document.getElementById('speech-waveform').style.display = 'flex';
+        document.getElementById('mic-trigger-btn').classList.add('pulse-indicator');
+      };
+
+      this.recognition.onend = () => {
+        this.isListening = false;
+        document.getElementById('speech-waveform').style.display = 'none';
+        document.getElementById('mic-trigger-btn').classList.remove('pulse-indicator');
+      };
+
+      this.recognition.onresult = (event) => {
+        const text = event.results[0][0].transcript;
+        const inputField = document.getElementById('chat-text-input');
+        if (inputField) {
+          inputField.value = text;
+          // Trigger automatic send
+          document.getElementById('chat-send-btn').click();
+        }
+      };
+
+      this.recognition.onerror = (e) => {
+        console.error('Speech Recognition Error:', e);
+        this.isListening = false;
+        document.getElementById('speech-waveform').style.display = 'none';
+      };
+    } else {
+      console.log("Web Speech Recognition not supported in this browser.");
+    }
+  },
+
+  toggleListen() {
+    if (!this.recognition) {
+      alert("Voice input is not supported in this browser version. Please type your query.");
+      return;
+    }
+    if (this.isListening) {
+      this.recognition.stop();
+    } else {
+      this.recognition.lang = this.locales[state.language] || 'en-US';
+      this.recognition.start();
+    }
+  },
+
+  speak(text) {
+    if (!this.synth) return;
+    this.synth.cancel(); // Stop current speech
+    
+    // Split into smaller segments if it's too long
+    const utterance = new SpeechSynthesisUtterance(text);
+    
+    // Choose appropriate voice
+    const locale = this.locales[state.language] || 'en-US';
+    utterance.lang = locale;
+    
+    // Look for matching browser voice
+    const voices = this.synth.getVoices();
+    const voice = voices.find(v => v.lang === locale || v.lang.startsWith(locale.split('-')[0]));
+    if (voice) {
+      utterance.voice = voice;
+    }
+
+    utterance.onstart = () => {
+      document.getElementById('speech-waveform').style.display = 'flex';
+    };
+    utterance.onend = () => {
+      document.getElementById('speech-waveform').style.display = 'none';
+    };
+    utterance.onerror = () => {
+      document.getElementById('speech-waveform').style.display = 'none';
+    };
+
+    this.synth.speak(utterance);
+  }
+};
+
+// --- Initialize App ---
+document.addEventListener('DOMContentLoaded', () => {
+  VoiceEngine.init();
+  initTheme();
+  setupEventListeners();
+  applyTranslations(state.language);
+  checkSupabaseSession().then(() => {
+    checkAuth();
+  });
+  setupPWA();
+  
+  // Try loading geolocation weather
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((pos) => {
+      state.currentLocation.lat = pos.coords.latitude;
+      state.currentLocation.lon = pos.coords.longitude;
+      if (state.token) loadWeatherData();
+    }, () => {
+      // Use defaults if denied
+      if (state.token) loadWeatherData();
+    });
+  }
+});
+
+// --- Theme and PWA Handlers ---
+function initTheme() {
+  document.body.className = state.theme === 'dark' ? 'dark-mode' : 'light-mode';
+  const toggleIcon = document.querySelector('#theme-toggle i');
+  if (toggleIcon) {
+    toggleIcon.className = state.theme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+  }
+}
+
+function setupPWA() {
+  // Service Worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+      .then(() => console.log('Service Worker Registered'))
+      .catch((e) => console.error('SW Registration Failed', e));
+  }
+
+  // Before Install prompt
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    state.pwaPrompt = e;
+    document.getElementById('install-btn').style.display = 'inline-flex';
+    document.getElementById('pwa-install-banner').style.display = 'flex';
+  });
+}
+
+// --- Setup Event Listeners ---
+function setupEventListeners() {
+  // Theme toggle
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    state.theme = state.theme === 'light' ? 'dark' : 'light';
+    localStorage.setItem('agriai_theme', state.theme);
+    initTheme();
+  });
+
+  // Settings theme selector
+  document.getElementById('settings-theme').value = state.theme;
+  document.getElementById('settings-theme').addEventListener('change', (e) => {
+    state.theme = e.target.value;
+    localStorage.setItem('agriai_theme', state.theme);
+    initTheme();
+  });
+
+  // Landing CTAs
+  document.getElementById('hero-get-started').addEventListener('click', () => {
+    if (state.token) {
+      showDashboard();
+    } else {
+      openAuthModal();
+    }
+  });
+
+  document.getElementById('hero-try-voice').addEventListener('click', () => {
+    toggleVoicePanel(true);
+  });
+
+  // PWA banner installation triggers
+  document.getElementById('pwa-accept-btn').addEventListener('click', () => {
+    if (state.pwaPrompt) {
+      state.pwaPrompt.prompt();
+      state.pwaPrompt.userChoice.then((choice) => {
+        if (choice.outcome === 'accepted') {
+          console.log('App install approved');
+        }
+        document.getElementById('pwa-install-banner').style.display = 'none';
+        document.getElementById('install-btn').style.display = 'none';
+      });
+    }
+  });
+
+  document.getElementById('pwa-close-btn').addEventListener('click', () => {
+    document.getElementById('pwa-install-banner').style.display = 'none';
+  });
+
+  document.getElementById('install-btn').addEventListener('click', () => {
+    document.getElementById('pwa-accept-btn').click();
+  });
+
+  // Auth Dialog Triggers
+  document.getElementById('nav-login-btn').addEventListener('click', openAuthModal);
+  document.getElementById('close-auth-btn').addEventListener('click', closeAuthModal);
+  
+  document.getElementById('tab-login').addEventListener('click', () => toggleAuthTabs('login'));
+  document.getElementById('tab-register').addEventListener('click', () => toggleAuthTabs('register'));
+  
+  document.getElementById('auth-form').addEventListener('submit', handleAuthSubmit);
+  document.getElementById('logout-btn').addEventListener('click', handleLogout);
+  document.getElementById('google-auth-btn').addEventListener('click', handleGoogleLogin);
+
+  // Sidebar dynamic navigation views swapping
+  const sidebarLinks = document.querySelectorAll('.sidebar-link');
+  sidebarLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      sidebarLinks.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+      
+      const panelId = link.getAttribute('data-panel');
+      showPanel(panelId);
+      
+      // Close sidebar in mobile view
+      document.querySelector('.dashboard-sidebar').classList.remove('mobile-open');
+    });
+  });
+
+  // Mobile menu button
+  document.querySelector('.menu-toggle-btn').addEventListener('click', () => {
+    document.querySelector('.dashboard-sidebar').classList.toggle('mobile-open');
+  });
+
+  // Settings Save preferences
+  document.getElementById('save-settings-btn').addEventListener('click', () => {
+    state.language = document.getElementById('settings-language').value;
+    state.geminiKey = document.getElementById('settings-gemini-key').value;
+    localStorage.setItem('agriai_lang', state.language);
+    localStorage.setItem('agriai_gemini_key', state.geminiKey);
+    
+    // Sync language with Voice Chat selector
+    document.getElementById('chat-language-select').value = state.language;
+    applyTranslations(state.language);
+    
+    alert("AgriAI configuration options updated successfully!");
+  });
+
+  // Direct change listeners for live translation update
+  document.getElementById('settings-language').addEventListener('change', (e) => {
+    state.language = e.target.value;
+    localStorage.setItem('agriai_lang', state.language);
+    document.getElementById('chat-language-select').value = state.language;
+    applyTranslations(state.language);
+  });
+
+  document.getElementById('chat-language-select').addEventListener('change', (e) => {
+    state.language = e.target.value;
+    localStorage.setItem('agriai_lang', state.language);
+    document.getElementById('settings-language').value = state.language;
+    applyTranslations(state.language);
+  });
+
+  // Sync settings lang initially
+  document.getElementById('settings-language').value = state.language;
+  document.getElementById('chat-language-select').value = state.language;
+  document.getElementById('settings-gemini-key').value = state.geminiKey;
+
+  // Sync ranges inputs display
+  setupRangeSync('fert-ph', 'ph-val-display');
+  setupRangeSync('fert-moisture', 'moisture-val-display');
+  setupRangeSync('irri-moisture', 'irri-moisture-display', '%');
+  setupRangeSync('irri-temp', 'irri-temp-display', '°C');
+  setupRangeSync('yield-moisture', 'yield-moisture-display', '%');
+
+  // Scanner File upload triggers
+  const dropZone = document.getElementById('drag-drop-zone');
+  const fileInput = document.getElementById('scan-file-input');
+
+  dropZone.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', handleFileSelect);
+
+  dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.style.background = 'rgba(16, 185, 129, 0.1)';
+  });
+  dropZone.addEventListener('dragleave', () => {
+    dropZone.style.background = 'none';
+  });
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.style.background = 'none';
+    if (e.dataTransfer.files.length > 0) {
+      fileInput.files = e.dataTransfer.files;
+      handleFileSelect();
+    }
+  });
+
+  document.getElementById('clear-preview-btn').addEventListener('click', clearScanPreview);
+  document.getElementById('run-scan-btn').addEventListener('click', performLeafScan);
+
+  // Scanner tab switching (before/after OpenCV filters)
+  const tabBtns = document.querySelectorAll('.slider-tab-btn');
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const viewType = btn.getAttribute('data-view');
+      const imgEl = document.getElementById('res-view-img');
+      
+      if (viewType === 'annotated') {
+        imgEl.src = state.activeScanUrls.annotated;
+      } else if (viewType === 'heatmap') {
+        imgEl.src = state.activeScanUrls.heatmap;
+      } else {
+        imgEl.src = state.activeScanUrls.original;
+      }
+    });
+  });
+
+  // Fertilizer submit form
+  document.getElementById('fertilizer-form').addEventListener('submit', handleFertilizerSubmit);
+
+  // Irrigation submit form
+  document.getElementById('irrigation-form').addEventListener('submit', handleIrrigationSubmit);
+
+  // Yield submit form
+  document.getElementById('yield-form').addEventListener('submit', handleYieldSubmit);
+
+  // Notifications Bell toggle
+  document.getElementById('bell-btn').addEventListener('click', () => {
+    const panel = document.getElementById('notif-panel');
+    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    // Clear notification dot
+    if (panel.style.display === 'block') {
+      api.post('/api/farming/notifications/read', {}).then(() => {
+        document.getElementById('notif-badge').style.display = 'none';
+      });
+    }
+  });
+
+  document.getElementById('notif-clear-btn').addEventListener('click', () => {
+    api.post('/api/farming/notifications/read', {}).then(() => {
+      document.getElementById('notif-list-container').innerHTML = '<p class="text-xs text-center p-3">No new notifications</p>';
+      document.getElementById('notif-badge').style.display = 'none';
+    });
+  });
+
+  // Voice widget UI toggles
+  document.getElementById('voice-widget-toggle').addEventListener('click', () => {
+    toggleVoicePanel();
+  });
+
+  document.getElementById('close-voice-panel-btn').addEventListener('click', () => {
+    toggleVoicePanel(false);
+  });
+
+  document.getElementById('mic-trigger-btn').addEventListener('click', () => {
+    VoiceEngine.toggleListen();
+  });
+
+  document.getElementById('chat-send-btn').addEventListener('click', sendChatMessage);
+  document.getElementById('chat-text-input').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendChatMessage();
+  });
+
+  // Setup prompt questions clicks
+  const promptBtns = document.querySelectorAll('.suggest-q-btn');
+  promptBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById('chat-text-input').value = btn.getAttribute('data-q');
+      sendChatMessage();
+    });
+  });
+
+  // Mobile camera simulation capture trigger
+  document.getElementById('camera-trigger-btn').addEventListener('click', () => {
+    // Standard file capture trigger via system camera
+    const camInput = document.createElement('input');
+    camInput.type = 'file';
+    camInput.accept = 'image/*';
+    camInput.capture = 'environment';
+    camInput.addEventListener('change', (event) => {
+      if (event.target.files.length > 0) {
+        fileInput.files = event.target.files;
+        handleFileSelect();
+      }
+    });
+    camInput.click();
+  });
+}
+
+// --- Range slider utility ---
+function setupRangeSync(inputId, displayId, suffix = '') {
+  const input = document.getElementById(inputId);
+  const display = document.getElementById(displayId);
+  if (input && display) {
+    input.addEventListener('input', (e) => {
+      display.textContent = `${e.target.value}${suffix}`;
+    });
+  }
+}
+
+// --- View Router ---
+function showPanel(panelId) {
+  const panels = document.querySelectorAll('.dashboard-panel');
+  panels.forEach(p => p.style.display = 'none');
+  
+  const target = document.getElementById(panelId);
+  if (target) {
+    target.style.display = 'flex';
+  }
+
+  // Load specific panel triggers
+  if (panelId === 'panel-home') {
+    loadOverviewStats();
+  } else if (panelId === 'panel-weather') {
+    loadWeatherData();
+  } else if (panelId === 'panel-market') {
+    loadMarketAndSchemes();
+  } else if (panelId === 'panel-iot') {
+    loadIoTConsole();
+  } else if (panelId === 'panel-admin') {
+    loadAdminStats();
+  }
+}
+
+// --- Auth Manager ---
+function openAuthModal() {
+  document.getElementById('auth-modal').style.display = 'flex';
+  toggleAuthTabs('login');
+}
+
+function closeAuthModal() {
+  document.getElementById('auth-modal').style.display = 'none';
+}
+
+function toggleAuthTabs(tab) {
+  const loginBtn = document.getElementById('tab-login');
+  const registerBtn = document.getElementById('tab-register');
+  const fullName = document.getElementById('group-fullname');
+  const role = document.getElementById('group-role');
+  const submitBtn = document.getElementById('auth-submit-btn');
+
+  if (tab === 'login') {
+    loginBtn.classList.add('active');
+    registerBtn.classList.remove('active');
+    fullName.style.display = 'none';
+    role.style.display = 'none';
+    submitBtn.textContent = 'Sign In';
+    document.getElementById('auth-title').textContent = 'Farmer Login';
+  } else {
+    loginBtn.classList.remove('active');
+    registerBtn.classList.add('active');
+    fullName.style.display = 'block';
+    role.style.display = 'block';
+    submitBtn.textContent = 'Register Profile';
+    document.getElementById('auth-title').textContent = 'Register Farmer Account';
+  }
+}
+
+async function handleAuthSubmit(e) {
+  e.preventDefault();
+  const username = document.getElementById('auth-username').value;
+  const password = document.getElementById('auth-password').value;
+  const submitType = document.getElementById('auth-submit-btn').textContent;
+  const errorMsg = document.getElementById('auth-error-msg');
+  
+  errorMsg.style.display = 'none';
+
+  if (submitType === 'Sign In') {
+    // Login
+    try {
+      const res = await api.post('/api/auth/login', { username, password });
+      if (res.token) {
+        state.token = res.token;
+        state.user = res.user;
+        localStorage.setItem('agriai_token', res.token);
+        localStorage.setItem('agriai_user', JSON.stringify(res.user));
+        
+        closeAuthModal();
+        showDashboard();
+      } else {
+        errorMsg.textContent = res.message || 'Credentials invalid';
+        errorMsg.style.display = 'block';
+      }
+    } catch (e) {
+      errorMsg.textContent = 'Database login server connection issue.';
+      errorMsg.style.display = 'block';
+    }
+  } else {
+    // Register
+    const fullName = document.getElementById('auth-fullname').value;
+    const role = document.getElementById('auth-role').value;
+    
+    try {
+      const res = await api.post('/api/auth/register', { username, password, role, full_name: fullName });
+      if (res.message.includes('success')) {
+        alert("Farmer profile registered! Please Sign In.");
+        toggleAuthTabs('login');
+      } else {
+        errorMsg.textContent = res.message || 'Registration failed';
+        errorMsg.style.display = 'block';
+      }
+    } catch (e) {
+      errorMsg.textContent = 'Registration pipeline error.';
+      errorMsg.style.display = 'block';
+    }
+  }
+}
+
+async function handleGoogleLogin() {
+  if (!supabaseClient) {
+    alert("Supabase client is not loaded. Please check your internet connection.");
+    return;
+  }
+  const { error } = await supabaseClient.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: window.location.origin
+    }
+  });
+  if (error) {
+    const errorMsg = document.getElementById('auth-error-msg');
+    errorMsg.textContent = error.message;
+    errorMsg.style.display = 'block';
+  }
+}
+
+async function checkSupabaseSession() {
+  if (!supabaseClient) return;
+  
+  try {
+    const { data: { session }, error } = await supabaseClient.auth.getSession();
+    if (error) {
+      console.error('Supabase session retrieval error:', error);
+      return;
+    }
+    
+    if (session && session.access_token) {
+      const errorMsg = document.getElementById('auth-error-msg');
+      // Swap Supabase OAuth access token for backend app JWT token
+      const res = await api.post('/api/auth/supabase-login', {
+        access_token: session.access_token
+      });
+      
+      if (res && res.token) {
+        state.token = res.token;
+        state.user = res.user;
+        localStorage.setItem('agriai_token', state.token);
+        localStorage.setItem('agriai_user', JSON.stringify(state.user));
+        
+        // Log out of Supabase locally so session isn't processed again on subsequent reloads
+        await supabaseClient.auth.signOut();
+        
+        closeAuthModal();
+        showDashboard();
+      } else {
+        openAuthModal();
+        errorMsg.textContent = res.message || 'Supabase authentication failed';
+        errorMsg.style.display = 'block';
+      }
+    }
+  } catch (e) {
+    console.error('Error swapping Supabase session:', e);
+  }
+}
+
+function checkAuth() {
+  if (state.token && state.user) {
+    showDashboard();
+  } else {
+    showLandingPage();
+  }
+}
+
+function showDashboard() {
+  document.getElementById('landing-page-view').style.display = 'none';
+  document.getElementById('main-header').style.display = 'none';
+  document.getElementById('dashboard-view').style.display = 'flex';
+  
+  document.getElementById('user-display-name').textContent = state.user.full_name;
+  document.getElementById('user-display-role').textContent = state.user.role;
+
+  // Manage Admin side link
+  if (state.user.role === 'admin' || state.user.role === 'expert') {
+    document.getElementById('nav-admin-link').style.display = 'flex';
+  } else {
+    document.getElementById('nav-admin-link').style.display = 'none';
+  }
+
+  showPanel('panel-home');
+  loadNotificationBadge();
+}
+
+function showLandingPage() {
+  document.getElementById('dashboard-view').style.display = 'none';
+  document.getElementById('landing-page-view').style.display = 'block';
+  document.getElementById('main-header').style.display = 'block';
+}
+
+function handleLogout() {
+  state.token = null;
+  state.user = null;
+  localStorage.removeItem('agriai_token');
+  localStorage.removeItem('agriai_user');
+  showLandingPage();
+}
+
+// --- Notifications Handler ---
+async function loadNotificationBadge() {
+  if (!state.token) return;
+  try {
+    const notifs = await api.get('/api/farming/notifications');
+    const isArray = Array.isArray(notifs);
+    const unread = isArray ? notifs.filter(n => n.read_status === 0) : [];
+    const badge = document.getElementById('notif-badge');
+    
+    if (unread.length > 0) {
+      badge.style.display = 'block';
+    } else {
+      badge.style.display = 'none';
+    }
+    
+    // Populate list
+    const container = document.getElementById('notif-list-container');
+    if (!isArray || notifs.length === 0) {
+      container.innerHTML = '<p class="text-xs text-center p-3">No new notifications</p>';
+      return;
+    }
+    
+    let html = '';
+    notifs.forEach(n => {
+      const isUnread = n.read_status === 0 ? 'unread' : '';
+      html += `
+        <div class="notif-item ${isUnread}">
+          <strong>${n.title}</strong>
+          <p>${n.message}</p>
+        </div>
+      `;
+    });
+    container.innerHTML = html;
+  } catch (e) {
+    console.error("Unable to sync notifications:", e);
+  }
+}
+
+// --- Module 1: Crop Scanner Controller ---
+function handleFileSelect() {
+  const fileInput = document.getElementById('scan-file-input');
+  if (fileInput.files.length > 0) {
+    const file = fileInput.files[0];
+    const previewContainer = document.getElementById('scanner-preview-container');
+    const previewImg = document.getElementById('scanner-preview-img');
+    const scanBtn = document.getElementById('run-scan-btn');
+    
+    previewImg.src = URL.createObjectURL(file);
+    previewContainer.style.display = 'block';
+    scanBtn.disabled = false;
+  }
+}
+
+function clearScanPreview() {
+  document.getElementById('scan-file-input').value = '';
+  document.getElementById('scanner-preview-container').style.display = 'none';
+  document.getElementById('run-scan-btn').disabled = true;
+}
+
+async function performLeafScan() {
+  const fileInput = document.getElementById('scan-file-input');
+  const cropSelect = document.getElementById('scan-crop-select');
+  
+  if (fileInput.files.length === 0) return;
+  
+  const file = fileInput.files[0];
+  const crop = cropSelect.value;
+  
+  const loader = document.getElementById('scanning-loader');
+  const resultCard = document.getElementById('scan-result-card');
+  
+  loader.style.display = 'flex';
+  resultCard.style.display = 'block';
+  
+  // Prep form data
+  const formData = new FormData();
+  formData.append('image', file);
+  formData.append('crop', crop);
+  
+  const headers = {};
+  if (state.token) {
+    headers['Authorization'] = `Bearer ${state.token}`;
+  }
+  headers['X-Language'] = state.language || 'en';
+
+  try {
+    const res = await fetch('/api/disease/scan', {
+      method: 'POST',
+      headers: headers,
+      body: formData
+    });
+    
+    const data = await res.json();
+    loader.style.display = 'none';
+    
+    if (res.status === 200) {
+      // Save urls to state for view toggle tabs
+      state.activeScanUrls.original = data.original_url;
+      state.activeScanUrls.annotated = data.annotated_url;
+      state.activeScanUrls.heatmap = data.heatmap_url;
+      
+      // Default show annotated outline
+      document.getElementById('res-view-img').src = data.annotated_url;
+      
+      // Reset tab active indicators
+      const tabs = document.querySelectorAll('.slider-tab-btn');
+      tabs.forEach(t => t.classList.remove('active'));
+      tabs[0].classList.add('active'); // set highlighted annotated outline active
+      
+      // Populate text details
+      document.getElementById('res-disease-name').textContent = data.disease_name;
+      document.getElementById('res-confidence').textContent = `${data.confidence}%`;
+      
+      const sevBadge = document.getElementById('res-severity-badge');
+      sevBadge.textContent = `${data.severity} Severity`;
+      sevBadge.className = `badge ${data.severity === 'Healthy' ? 'badge-success' : (data.severity === 'High' ? 'badge-error' : 'badge-warning')}`;
+      
+      document.getElementById('res-organic-remedy').textContent = data.treatment_organic;
+      document.getElementById('res-chemical-remedy').textContent = data.treatment_chemical;
+      document.getElementById('res-prevention').textContent = data.prevention;
+      
+      // Auto Voice speak out loud details if farmer settings toggle allows it
+      const vocalText = `Diagnostics complete. Detected ${data.disease_name} with ${data.severity} severity and ${data.confidence} percent confidence. Recommended remedy: ${data.treatment_organic}`;
+      VoiceEngine.speak(vocalText);
+      
+      // Refresh Notification badge log
+      loadNotificationBadge();
+    } else {
+      alert(data.message || "Scanning failed.");
+      resultCard.style.display = 'none';
+    }
+  } catch (e) {
+    loader.style.display = 'none';
+    resultCard.style.display = 'none';
+    alert("Leaf analysis server connection issue.");
+  }
+}
+
+// --- Module 2: Fertilizer Controller ---
+async function handleFertilizerSubmit(e) {
+  e.preventDefault();
+  const crop = document.getElementById('fert-crop').value;
+  const soil = document.getElementById('fert-soil').value;
+  const ph = document.getElementById('fert-ph').value;
+  const moisture = document.getElementById('fert-moisture').value;
+  const stage = document.getElementById('fert-stage').value;
+  const temp = 30; // current standard temp
+
+  try {
+    const res = await api.post('/api/farming/fertilizer', {
+      crop, soil_type: soil, ph, moisture, growth_stage: stage, temperature: temp
+    });
+
+    const resultCard = document.getElementById('fertilizer-result-card');
+    resultCard.style.display = 'block';
+
+    document.getElementById('fert-health-score-bar').style.width = `${res.soil_health_score}%`;
+    document.getElementById('fert-health-score-text').textContent = `${res.soil_health_score}/100`;
+    document.getElementById('fert-npk-ratio').textContent = res.npk_ratio;
+    
+    document.getElementById('fert-primary').textContent = res.recommended_fertilizer;
+    document.getElementById('fert-organic').textContent = res.organic_alternative;
+    document.getElementById('fert-qty').textContent = `${res.quantity} | Method: ${res.application_method}`;
+    
+    const warnBox = document.getElementById('fert-warning-box');
+    document.getElementById('fert-warnings').textContent = res.overuse_alert !== "No risk detected." ? res.overuse_alert : res.risk_warnings;
+    warnBox.className = res.overuse_alert !== "No risk detected." ? "remedy-card border-red bg-red-light mt-3" : "remedy-card border-yellow bg-yellow-light mt-3";
+
+    // Voice synthesize
+    VoiceEngine.speak(`Fertilizer advisory computed. Primary choice: ${res.recommended_fertilizer}. Apply: ${res.quantity}`);
+  } catch (e) {
+    alert("Fertilizer system offline.");
+  }
+}
+
+// --- Module 4: Irrigation Controller ---
+async function handleIrrigationSubmit(e) {
+  e.preventDefault();
+  const crop = document.getElementById('irri-crop').value;
+  const moisture = document.getElementById('irri-moisture').value;
+  const temp = document.getElementById('irri-temp').value;
+  const water = document.getElementById('irri-water').value;
+  const rainProb = 15; // fallback standard
+
+  try {
+    const res = await api.post('/api/farming/irrigation', {
+      crop, soil_moisture: moisture, temperature: temp, rain_probability: rainProb, water_availability: water
+    });
+
+    const resultCard = document.getElementById('irrigation-result-card');
+    resultCard.style.display = 'block';
+
+    const statusBadge = document.getElementById('irri-status');
+    statusBadge.textContent = res.status;
+    statusBadge.className = `badge ${res.status === 'Irrigation Required' ? 'badge-error' : 'badge-success'}`;
+
+    document.getElementById('irri-qty').textContent = res.water_quantity;
+    document.getElementById('irri-time').textContent = res.irrigation_timing;
+    document.getElementById('irri-method').textContent = res.best_method;
+    document.getElementById('irri-drip').textContent = res.drip_guideline;
+    document.getElementById('irri-saving').textContent = res.water_saving_suggestion;
+
+    VoiceEngine.speak(`Irrigation plan generated: Status is ${res.status}. Recommended method is ${res.best_method}`);
+  } catch (e) {
+    alert("Irrigation system connection failure.");
+  }
+}
+
+// --- Module 12: Yield Predictor Controller ---
+async function handleYieldSubmit(e) {
+  e.preventDefault();
+  const crop = document.getElementById('yield-crop').value;
+  const soil = document.getElementById('yield-soil').value;
+  const moisture = document.getElementById('yield-moisture').value;
+  const history = document.getElementById('yield-history').value;
+  const fertilizer = document.getElementById('yield-fertilizer').value;
+
+  try {
+    const res = await api.post('/api/farming/yield', {
+      crop, soil_type: soil, moisture, disease_history: history, fertilizer_usage: fertilizer
+    });
+
+    const resultCard = document.getElementById('yield-result-card');
+    resultCard.style.display = 'block';
+
+    document.getElementById('yield-expected').textContent = res.expected_yield;
+    document.getElementById('yield-potential').textContent = res.potential_yield;
+    document.getElementById('yield-risks').textContent = res.risk_analysis;
+
+    const listContainer = document.getElementById('yield-suggestions-ul');
+    let html = '';
+    res.yield_suggestions.forEach(s => {
+      html += `<li>${s}</li>`;
+    });
+    listContainer.innerHTML = html;
+
+    VoiceEngine.speak(`Yield forecasted at ${res.expected_yield}. Potential up to ${res.potential_yield} using optimized N P K ratios.`);
+  } catch (e) {
+    alert("Yield calculator error.");
+  }
+}
+
+// --- Module 3: Weather Intelligence Controller ---
+async function loadWeatherData() {
+  try {
+    const weather = await api.get(`/api/farming/weather?lat=${state.currentLocation.lat}&lon=${state.currentLocation.lon}`);
+    
+    // Top Bar briefing update
+    const topBar = document.getElementById('weather-summary-bar');
+    topBar.innerHTML = `<i class="fa-solid fa-cloud-sun text-yellow"></i> ${weather.temperature}°C, ${weather.description}`;
+    
+    // Current layout details
+    document.getElementById('weather-temp').textContent = `${weather.temperature}°C`;
+    document.getElementById('weather-desc').textContent = weather.description;
+    document.getElementById('weather-humidity').textContent = `${weather.humidity}%`;
+    document.getElementById('weather-wind').textContent = `${weather.wind_speed} km/h`;
+
+    // Advisory bullets lists
+    const advList = document.getElementById('weather-advisory-list');
+    let htmlAdv = '';
+    weather.advisory.forEach(a => {
+      htmlAdv += `<li>${a}</li>`;
+    });
+    advList.innerHTML = htmlAdv;
+
+    // Display banner alerts if warnings exist
+    const banner = document.getElementById('dashboard-alert-banner');
+    const bannerText = document.getElementById('alert-banner-text');
+    const warnings = weather.advisory.filter(a => !a.includes('✅'));
+    if (warnings.length > 0) {
+      bannerText.textContent = warnings[0];
+      banner.style.display = 'flex';
+      
+      // Auto voice speak critical weather
+      VoiceEngine.speak(`Weather advisory warning: ${warnings[0]}`);
+    } else {
+      banner.style.display = 'none';
+    }
+
+    // 5-Day Weekly cards timeline
+    const weeklyGrid = document.getElementById('weekly-forecast-grid');
+    let htmlWeek = '';
+    weather.forecast.forEach(f => {
+      const codeIcon = f.description.includes('Rain') || f.description.includes('Showers') ? 'fa-cloud-showers-heavy text-blue' : (f.description.includes('Cloud') ? 'fa-cloud text-secondary' : 'fa-sun text-yellow');
+      htmlWeek += `
+        <div class="weekly-forecast-card">
+          <strong>${f.day}</strong>
+          <div><i class="fa-solid ${codeIcon}"></i></div>
+          <div class="text-xs font-bold">${f.max_temp}° / ${f.min_temp}°C</div>
+          <span class="text-xs text-secondary">${f.rain_probability}% Rain</span>
+        </div>
+      `;
+    });
+    weeklyGrid.innerHTML = htmlWeek;
+  } catch (e) {
+    console.error("Unable to load weather telemetry:", e);
+  }
+}
+
+// --- Module 11: Market Mandi & Schemes Catalog ---
+async function loadMarketAndSchemes() {
+  try {
+    const res = await api.get('/api/farming/market');
+    
+    // 1. Mandi Table
+    const tbody = document.getElementById('market-prices-tbody');
+    let htmlPrices = '';
+    res.prices.forEach(p => {
+      const trendIcon = p.trend === 'up' ? 'fa-arrow-trend-up text-emerald' : (p.trend === 'down' ? 'fa-arrow-trend-down text-red' : 'fa-minus text-secondary');
+      htmlPrices += `
+        <tr>
+          <td><strong>${p.crop_name}</strong></td>
+          <td>₹${p.price_per_kg.toFixed(2)}/kg</td>
+          <td>${p.location}</td>
+          <td><i class="fa-solid ${trendIcon}"></i> ${p.trend.toUpperCase()}</td>
+        </tr>
+      `;
+    });
+    tbody.innerHTML = htmlPrices;
+
+    // 2. High demand suggestions box
+    const suggestBox = document.getElementById('crop-suggestions-box');
+    let htmlSuggest = '';
+    res.crop_recommendations.forEach(r => {
+      htmlSuggest += `
+        <div class="cultivation-item">
+          <h5>${r.crop} <span class="badge badge-success ml-auto">${r.demand} Demand</span></h5>
+          <p class="text-xs text-secondary mt-1">${r.reason}</p>
+        </div>
+      `;
+    });
+    suggestBox.innerHTML = htmlSuggest;
+
+    // 3. Schemes list
+    const schemesBox = document.getElementById('government-schemes-box');
+    let htmlSchemes = '';
+    res.schemes.forEach(s => {
+      htmlSchemes += `
+        <div class="scheme-card">
+          <h5>${s.name}</h5>
+          <p class="text-xs font-bold text-secondary">Funding: ${s.subsidy}</p>
+          <p class="text-xs mt-1">${s.benefit}</p>
+        </div>
+      `;
+    });
+    schemesBox.innerHTML = htmlSchemes;
+  } catch (e) {
+    console.error("Unable to load market parameters:", e);
+  }
+}
+
+// --- Module 13: Drone & IoT Console Controller ---
+async function loadIoTConsole() {
+  try {
+    const res = await api.get('/api/analytics/summary');
+    const iot = res.iot_status;
+
+    document.getElementById('iot-drone-status').textContent = iot.drone_connection;
+    document.getElementById('iot-drone-battery').textContent = iot.drone_battery;
+    document.getElementById('iot-drone-active').textContent = `${iot.active_drones} Quadcopters`;
+    document.getElementById('iot-satellite').textContent = iot.satellite_sync;
+
+    const sensorContainer = document.getElementById('iot-sensors-container');
+    let htmlSensors = '';
+    iot.soil_moisture_sensors.forEach(s => {
+      htmlSensors += `
+        <div class="sensor-node-card">
+          <div>
+            <h5>Node: ${s.sensor_id}</h5>
+            <span class="text-xs text-secondary">${s.location}</span>
+          </div>
+          <div class="sensor-read-value">${s.moisture}</div>
+        </div>
+      `;
+    });
+    sensorContainer.innerHTML = htmlSensors;
+  } catch (e) {
+    console.error("Unable to load IoT configurations:", e);
+  }
+}
+
+// --- Admin Panel Metrics ---
+async function loadAdminStats() {
+  try {
+    const res = await api.get('/api/analytics/summary');
+    const met = res.metrics;
+    const apiStatus = res.api_status;
+
+    document.getElementById('admin-stat-users').textContent = met.total_users;
+    document.getElementById('admin-stat-experts').textContent = met.total_experts;
+    document.getElementById('admin-stat-cpu').textContent = apiStatus.server_cpu;
+    document.getElementById('admin-stat-memory').textContent = apiStatus.server_memory;
+
+    document.getElementById('admin-api-meteo').textContent = apiStatus.open_meteo;
+    document.getElementById('admin-api-translate').textContent = apiStatus.translation_engine;
+
+    document.getElementById('admin-stat-farmers').textContent = met.total_farmers;
+    document.getElementById('admin-stat-scans').textContent = met.total_scans;
+    document.getElementById('admin-stat-chats').textContent = met.total_chats;
+  } catch (e) {
+    console.error("Unable to load admin telemetry stats:", e);
+  }
+}
+
+// --- Module 5: Voice Chat Engine ---
+function toggleVoicePanel(explicitShow = null) {
+  const panel = document.getElementById('voice-chat-panel');
+  if (explicitShow === true) {
+    panel.style.display = 'flex';
+  } else if (explicitShow === false) {
+    panel.style.display = 'none';
+  } else {
+    panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
+  }
+  
+  // Set selected state language locale
+  document.getElementById('chat-language-select').value = state.language;
+}
+
+async function sendChatMessage() {
+  const inputEl = document.getElementById('chat-text-input');
+  const langSelect = document.getElementById('chat-language-select');
+  const msg = inputEl.value.trim();
+  const lang = langSelect.value;
+  
+  if (!msg) return;
+
+  // Render user bubble
+  appendChatBubble(msg, 'user');
+  inputEl.value = '';
+
+  // Store active speaking language temporarily
+  state.language = lang;
+  localStorage.setItem('agriai_lang', lang);
+  document.getElementById('settings-language').value = lang;
+
+  // Display typing indicator bubble
+  const loaderBubble = appendChatBubble('<i class="fa-solid fa-ellipsis fa-bounce"></i> Analyzing query...', 'bot', 'typing-loader-bubble');
+
+  try {
+    const res = await api.post('/api/chat/message', {
+      message: msg,
+      language: lang,
+      api_key: state.geminiKey
+    });
+    
+    // Remove loader
+    loaderBubble.remove();
+
+    // Render bot reply
+    appendChatBubble(res.reply, 'bot');
+    
+    // Voice Speak synthesis out loud in selected local language
+    VoiceEngine.speak(res.reply);
+  } catch (e) {
+    loaderBubble.remove();
+    appendChatBubble("I'm sorry, I am currently unable to connect to the digital translation server. Please check your network.", 'bot');
+  }
+}
+
+function appendChatBubble(text, sender, className = '') {
+  const container = document.getElementById('chat-messages-container');
+  const bubble = document.createElement('div');
+  bubble.className = `chat-bubble ${sender === 'user' ? 'user-bubble' : 'bot-bubble'} ${className}`;
+  bubble.innerHTML = text;
+  
+  container.appendChild(bubble);
+  container.scrollTop = container.scrollHeight;
+  return bubble;
+}
+
+// --- Module 8 & 9: Charts Renderer (Chart.js) ---
+async function loadOverviewStats() {
+  try {
+    const res = await api.get('/api/analytics/summary');
+    
+    // Quick statistics update
+    document.getElementById('stat-scans').textContent = res.metrics.total_scans;
+    document.getElementById('stat-water').textContent = res.water_savings.saving_ratio;
+
+    // 1. Draw Production Yield line chart
+    const yieldCtx = document.getElementById('yieldChart').getContext('2d');
+    if (state.charts.yield) state.charts.yield.destroy();
+    
+    state.charts.yield = new Chart(yieldCtx, {
+      type: 'line',
+      data: {
+        labels: res.crop_yield_trends.labels,
+        datasets: [
+          {
+            label: 'Tomato Yield (T/Acre)',
+            data: res.crop_yield_trends.tomato_yields,
+            borderColor: '#10b981',
+            tension: 0.3,
+            fill: false
+          },
+          {
+            label: 'Paddy Yield (T/Acre)',
+            data: res.crop_yield_trends.paddy_yields,
+            borderColor: '#3b82f6',
+            tension: 0.3,
+            fill: false
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'top', labels: { color: state.theme === 'dark' ? '#fff' : '#000' } }
+        },
+        scales: {
+          x: { grid: { color: 'rgba(16, 185, 129, 0.08)' }, ticks: { color: state.theme === 'dark' ? '#fff' : '#000' } },
+          y: { grid: { color: 'rgba(16, 185, 129, 0.08)' }, ticks: { color: state.theme === 'dark' ? '#fff' : '#000' } }
+        }
+      }
+    });
+
+    // 2. Draw Disease occurrences Doughnut pie chart
+    const diseaseCtx = document.getElementById('diseaseChart').getContext('2d');
+    if (state.charts.disease) state.charts.disease.destroy();
+    
+    const diseaseLabels = Object.keys(res.disease_distribution);
+    const diseaseData = Object.values(res.disease_distribution);
+
+    state.charts.disease = new Chart(diseaseCtx, {
+      type: 'doughnut',
+      data: {
+        labels: diseaseLabels,
+        datasets: [{
+          data: diseaseData,
+          backgroundColor: ['#ef4444', '#f97316', '#eab308', '#3b82f6', '#8b5cf6', '#10b981'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'right', labels: { color: state.theme === 'dark' ? '#fff' : '#000' } }
+        }
+      }
+    });
+
+    // 3. Render recent scans logs table
+    const tbody = document.getElementById('dashboard-recent-scans-tbody');
+    if (res.user_recent_scans && res.user_recent_scans.length > 0) {
+      let html = '';
+      res.user_recent_scans.forEach(s => {
+        html += `
+          <tr>
+            <td><strong>${s.crop_name}</strong></td>
+            <td>${s.disease_name}</td>
+            <td><span class="badge ${s.severity === 'Healthy' ? 'badge-success' : (s.severity === 'High' ? 'badge-error' : 'badge-warning')}">${s.severity}</span></td>
+            <td>${s.confidence}%</td>
+            <td>${new Date(s.created_at).toLocaleDateString()}</td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML = html;
+    } else {
+      tbody.innerHTML = `<tr><td colspan="5" class="text-center">No scans found. Use the Leaf Scanner to diagnose crops.</td></tr>`;
+    }
+
+  } catch (e) {
+    console.error("Unable to load overview graph metrics:", e);
+  }
+}
+
+// --- UI Language Translation Matrix (11 Supported Languages) ---
+const uiTranslations = {
+  en: {
+    nav: ["Home", "Features", "Benefits", "Crops", "FAQ"],
+    login: "Login",
+    hero_badge: "AI Agriculture Revolution",
+    hero_title: "Precision Farming Powered by Artificial Intelligence",
+    hero_desc: "Instantly diagnose crop diseases using Computer Vision, optimize water usage, automate NPK soil advisory, and speak directly with our Voice Assistant in 11 regional languages.",
+    hero_dashboard: "Launch Dashboard",
+    hero_voice: "Try Voice Assistant",
+    sidebar: ["Overview", "Leaf Scanner", "Soil & Fertilizer", "Irrigation Plan", "Weather Advisory", "Market & Schemes", "Yield Predictor", "Drone & IoT", "Admin Panel", "Settings"],
+    logout: "Logout",
+    panels: {
+      home: ["Farming Command Center", "Real-time analytics, weather forecasts, and satellite statistics."],
+      scanner: ["AI Leaf Disease Scanner", "Snap a photo or drag-and-drop crop leaves to detect plant diseases using computer vision."],
+      fertilizer: ["Precision Fertilizer & Soil Advisory", "Compute tailored chemical NPK dosages and organic substitutes to protect soil quality."],
+      irrigation: ["Smart Irrigation Planning", "Calculate crop hydration schedules to reduce water consumption up to 35%."],
+      weather: ["Smart Weather Advisory", "Retrieve regional telemetry forecasts and AI-generated farm action guides."],
+      market: ["Government Schemes & Market Prices", "Stay up to date with crop valuation metrics, loan benefits, and subsidies."],
+      yield: ["AI Yield Forecaster", "Provide agronomic data to estimate total harvest quantity per acre and mitigate cultivation risks."],
+      iot: ["Drone & IoT Integration Console", "Monitor real-time sensor array parameters, battery levels, and automatic drone scouting flights."],
+      admin: ["System Admin & Expert Panel", "Monitor platform statistics, active API latencies, and manage user role configurations."],
+      settings: ["Application Settings", "Set translation preferences, credentials, and toggle Gemini generative models."]
+    },
+    buttons: {
+      scan: "Perform AI Diagnostics",
+      npk: "Compute NPK Recommendation",
+      irri: "Generate Irrigation Plan",
+      yield: "Forecast Expected Yield",
+      settings: "Save Preferences"
+    }
+  },
+  te: {
+    nav: ["హోమ్", "ఫీచర్లు", "ప్రయోజనాలు", "పంటలు", "ఎఫ్ ఎ క్యూ"],
+    login: "లాగిన్",
+    hero_badge: "ఏఐ వ్యవసాయ విప్లవం",
+    hero_title: "కృత్రిమ మేధస్సుతో నడిచే ఖచ్చితమైన వ్యవసాయం",
+    hero_desc: "కంప్యూటర్ విజన్ ఉపయోగించి పంట వ్యాధులను గుర్తించండి, నీటి వినియోగాన్ని ఆప్టిమైజ్ చేయండి మరియు 11 ప్రాంతీయ భాషల్లో వాయిస్ అసిస్టెంట్‌తో మాట్లాడండి.",
+    hero_dashboard: "డాష్‌బోర్డ్ ప్రారంభించు",
+    hero_voice: "వాయిస్ అసిస్టెంట్ ప్రయత్నించండి",
+    sidebar: ["అవలోకనం", "ఆకు స్కానర్", "నేల & ఎరువులు", "నీటి పారుదల ప్రణాళిక", "వాతావరణ సలహా", "మార్కెట్ & పథకాలు", "దిగుబడి సూచిక", "డ్రోన్ & ఐఓటీ", "అడ్మిన్ ప్యానెల్", "సెట్టింగులు"],
+    logout: "లాగ్ అవుట్",
+    panels: {
+      home: ["వ్యవసాయ కమాండ్ సెంటర్", "నిజ-సమయ విశ్లేషణలు, వాతావరణ అంచనాలు మరియు ఉపగ్రహ గణాంకాలు."],
+      scanner: ["కృత్రిమ మేధ ఆకు వ్యాధి స్కానర్", "కంప్యూటర్ విజన్ ఉపయోగించి ఆకు వ్యాధులను గుర్తించడానికి ఫోటో తీయండి లేదా అప్‌లోడ్ చేయండి."],
+      fertilizer: ["ఖచ్చితమైన ఎరువులు & నేల సലహా", "నేల నాణ్యతను రక్షించడానికి అనుకూలీకరించిన రसायన NPK మోతాదులు మరియు సేంద్రీయ ప్రత్యామ్నಾಯాలను లెక్కించండి."],
+      irrigation: ["స్మార్ట్ నీటి పారుదల ప్రణాళిక", "నీటి వినియోగాన్ని 35% వరకు తగ్గించడానికి నీటి పారుదల షెడ్యూల్‌ను లెక్కించండి."],
+      weather: ["స్మార్ట్ వాతావరణ సലహా", "ప్రాంతీయ వాతావరణ అంచనాలు మరియు ఏఐ ఆధారిత వ్యవసాయ కార్యాచరణ మార్గదర్శకాలను పొందండి."],
+      market: ["ప్రభుత్వ పథకాలు & మార్కెట్ ధరలు", "పంటల మార్కెట్ ధరలు, రుణ ప్రయోజనాలు మరియు సబ్సిడీల వివరాలను తెలుసుకోండి."],
+      yield: ["ఏఐ పంట దిగుబడి సూచిక", "వ్యవసాయ డేటాను అందించడం ద్వారా ఎకరానికి మొత్తం పంట దిగుబడిని అంచనా వేయండి."],
+      iot: ["డ్రోన్ & ఐఓటీ కన్సోల్", "నిజ-సమయ సెన్సార్ పారామితులు, బ్యాటరీ స్థాయిలు మరియు డ్రోన్ విమానాలను పర్యవేక్షించండి."],
+      admin: ["సిస్టమ్ అడ్మిన్ & నిపుణుల ప్యానెల్", "ప్లాట్‌ఫారమ్ గణాంకాలు, క్రియాశీల API జాప్యాలు మరియు వినియోగదారు పాత్రలను పర్యవేక్షించండి."],
+      settings: ["అప్లికేషన్ సెట్టింగులు", "భాషా ప్రాధాన్యతలు మరియు ఏఐ కీలను కాన్ఫિగర్ చేయండి."]
+    },
+    buttons: {
+      scan: "ఏఐ విశ్లేషణ ప్రారంభించు",
+      npk: "NPK సిఫార్సును లెక్కించు",
+      irri: "నీటి పారుదల ప్రణాళికను సృష్టించు",
+      yield: "దిగుబడిని అంచనా వేయి",
+      settings: "ప్రాధాನ್ಯతలను సేవ్ చేయి"
+    }
+  },
+  hi: {
+    nav: ["होम", "विशेषताएं", "लाभ", "फसलें", "सामान्य प्रश्न"],
+    login: "लॉगिन",
+    hero_badge: "एआई कृषि क्रांति",
+    hero_title: "कृत्रिम बुद्धिमत्ता द्वारा संचालित सटीक खेती",
+    hero_desc: "कंप्यूटर विज़न का उपयोग करके फसल रोगों का निदान करें, पानी के उपयोग को अनुकूलित करें और 11 क्षेत्रीय भाषाओं में वॉयस असिस्टेंट से बात करें.",
+    hero_dashboard: "डैशबोर्ड लॉन्च करें",
+    hero_voice: "वॉयस असिस्टेंट का प्रयास करें",
+    sidebar: ["अवलोकन", "लीफ स्कैनर", "मिट्टी और उर्वरक", "सिंचाई योजना", "मौसम सलाह", "बाजार और योजनाएं", "उपज भविष्यवक्ता", "ड्रोन और IoT", "एडमिन पैनल", "सेटिंग्स"],
+    logout: "लॉग आउट",
+    panels: {
+      home: ["कृषि कमान केंद्र", "वास्तविक समय विश्लेषण, मौसम पूर्वानुमान और उपग्रह सांख्यिकी."],
+      scanner: ["एआई लीफ रोग स्कैनर", "कंप्यूटर विज़न का उपयोग करके पौधों के रोगों का पता लगाने के लिए फोटो लें या पत्तियों को अपलोड करें."],
+      fertilizer: ["सटीक उर्वरक और मिट्टी सलाह", "मिट्टी की गुणवत्ता की रक्षा के लिए रासायनिक एनपीके खुराक और जैविक विकल्पों की गणना करें."],
+      irrigation: ["स्मार्ट सिंचाई योजना", "पानी की खपत को 35% तक कम करने के लिए फसल जलयोजन कार्यक्रम की गणना करें."],
+      weather: ["स्मार्ट मौसम सलाह", "क्षेत्रीय मौसम पूर्वानुमान और एआई-जनित कृषि मार्गदर्शिकाएँ प्राप्त करें."],
+      market: ["सरकारी योजनाएं और बाजार मूल्य", "फसल मूल्यांकन, ऋण लाभ और सब्सिडी के साथ अद्यतित रहें."],
+      yield: ["एआई उपज भविष्यवक्ता", "प्रति एकड़ कुल फसल मात्रा का अनुमान लगाने के लिए कृषि संबंधी डेटा प्रदान करें."],
+      iot: ["ड्रोन और IoT एकीकरण कंसोल", "वास्तविक समय सेंसर मापदंडों, बैटरी स्तर और ड्रोन उड़ानों की निगरानी करें."],
+      admin: ["सिस्टम एडमिन और एक्सपर्ट पैनल", "प्लेटफ़ॉर्म आंकड़े, सक्रिय एपीआई विलंबता और उपयोगकर्ता भूमिकाओं की निगरानी करें."],
+      settings: ["एप्लिकेशन सेटिंग्स", "अनुवाद प्राथमिकताएं और एपीआई कुंजी सेट करें."]
+    },
+    buttons: {
+      scan: "एआई निदान करें",
+      npk: "एनपीके सिफारिश की गणना करें",
+      irri: "सिंचाई योजना उत्पन्न करें",
+      yield: "अपेक्षित उपज का पूर्वानुमान लगाएं",
+      settings: "प्राथमिकताएं सहेजें"
+    }
+  },
+  ta: {
+    nav: ["முகப்பு", "அம்சங்கள்", "நன்மைகள்", "பயிர்கள்", "கேள்விகள்"],
+    login: "உள்நுழை",
+    hero_badge: "AI விவசாய புரட்சி",
+    hero_title: "செயற்கை நுண்ணறிவு மூலம் துல்லியமான விவசாயம்",
+    hero_desc: "கம்ப்யூட்டர் விஷன் மூலம் பயிர் நோய்களைக் கண்டறியவும், நீர் பயன்பாட்டை மேம்படுத்தவும், 11 பிராந்திய மொழிகளில் பேசவும்.",
+    hero_dashboard: "டாஷ்போர்டை துவக்கு",
+    hero_voice: "குரல் உதவியாளரை முயற்சிக்கவும்",
+    sidebar: ["கண்ணோட்டம்", "இலை ஸ்கேனர்", "மண் & உரம்", "பாசனத் திட்டம்", "வானிலை ஆலோசனை", "சந்தை & திட்டங்கள்", "விளைச்சல் கணிப்பான்", "ட்ரோன் & IoT", "நிர்வாகக் குழு", "அமைப்புகள்"],
+    logout: "வெளியேறு",
+    panels: {
+      home: ["விவசாய கட்டளை மையம்", "நிகழ்நேர பகுப்பாய்வு, வானிலை முன்னறிவிப்பு மற்றும் செயற்கைக்கோள் புள்ளிவிவரங்கள்."],
+      scanner: ["AI இலை நோய் ஸ்கேனர்", "கணினி பார்வை மூலம் பயிர் நோய்களைக் கண்டறிய இலையின் புகைப்படத்தை பதிவேற்றவும்."],
+      fertilizer: ["துல்லிய உரம் & மண் ஆலோசனை", "மண்ணின் தரத்தைப் பாதுகாக்க ரசாயன NPK அளவுகள் மற்றும் கரிம மாற்றுகளைக் கணக்கிடுங்கள்."],
+      irrigation: ["ஸ்மார்ட் நீர்ப்பாசனத் திட்டம்", "நீர் நுகர்வை 35% வரை குறைக்க பயிர் நீரேற்ற அட்டவணையை கணக்கிடுங்கள்."],
+      weather: ["ஸ்மார்ட் வானிலை ஆலோசனை", "வானிலை முன்னறிவிப்புகள் மற்றும் AI விவசாய வழிகாட்டிகளைப் பெறுங்கள்."],
+      market: ["அரசு திட்டங்கள் & சந்தை விலைகள்", "பயிர் விலைகள், கடன் நன்மைகள் மற்றும் மானியங்கள் பற்றி அறிந்து கொள்ளுங்கள்."],
+      yield: ["AI விளைச்சல் கணிப்பான்", "ஒரு ஏக்கருக்கான மொத்த பயிர் விளைச்சலை மதிப்பிடுவதற்கு தரவை வழங்கவும்."],
+      iot: ["ட்ரோன் & IoT கன்சோல்", "சென்சார் அளவுருக்கள், பேറ്റரி அளவுகள் এবং ட்ரோன் விமானங்களை கண்காணிக்கவும்."],
+      admin: ["நிர்வாகி & நிபுணர் குழு", "தள புள்ளிவிவரங்கள், செயலில் உள்ள API தாமதங்கள் மற்றும் பயனர் பாத்திரங்களை கண்காணிக்கவும்."],
+      settings: ["பயன்பாட்டு அமைப்புகள்", "மொழி விருப்பத்தேர்வுகள் மற்றும் AI விசைகளை உள்ளமைக்கவும்."]
+    },
+    buttons: {
+      scan: "AI கண்டறிதல் செய்",
+      npk: "NPK பரிந்துரையைக் கணக்கிடு",
+      irri: "நீர்ப்பாசனத் திட்டத்தை உருவாக்கு",
+      yield: "எதிர்பார்க்கப்படும் விளைச்சலைக் கணி",
+      settings: "விருப்பங்களைச் சேமி"
+    }
+  },
+  kn: {
+    nav: ["ಮುಖಪುಟ", "ವೈಶಿಷ್ಟ್ಯಗಳು", "ಪ್ರಯೋಜನಗಳು", "ಬೆಳೆಗಳು", "FAQ"],
+    login: "ಲಾಗಿನ್",
+    hero_badge: "AI ಕೃಷಿ ಕ್ರಾಂತಿ",
+    hero_title: "ಕೃತಕ ಬುದ್ಧಿಮತ್ತೆಯಿಂದ ಚಾಲಿತ ನಿಖರ ಕೃಷಿ",
+    hero_desc: "ಕಂಪ್ಯೂಟರ್ ವಿಷನ್ ಬಳಸಿ ಬೆಳೆ ರೋಗಗಳನ್ನು ಪತ್ತೆಹಚ್ಚಿ, ನೀರಿನ ಬಳಕೆಯನ್ನು ಉತ್ತಮಗೊಳಿಸಿ ಮತ್ತು 11 ಪ್ರಾದೇಶಿಕ ಭಾಷೆಗಳಲ್ಲಿ ಮಾತನಾಡಿ.",
+    hero_dashboard: "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ ಪ್ರಾರಂಭಿಸಿ",
+    hero_voice: "ಧ್ವನಿ ಸಹಾಯಕರನ್ನು ಪ್ರಯತ್ನಿಸಿ",
+    sidebar: ["ಅವಲೋಕನ", "ಎಲೆ ಸ್ಕ್ಯಾನರ್", "ಮಣ್ಣು ಮತ್ತು ಗೊಬ್ಬರ", "ನೀರಾವರಿ ಯೋಜನೆ", "ಹವಾಮಾನ ಸಲಹೆ", "ಮಾರುಕಟ್ಟೆ ಮತ್ತು ಯೋಜನೆಗಳು", "ಇಳುವರಿ ಮುನ್ಸೂಚಕ", "ಡ್ರೋನ್ ಮತ್ತು IoT", "ನಿರ್ವಾಹಕ ಫಲಕ", "ಸೆಟ್ಟಿಂಗ್‌ಗಳು"],
+    logout: "ಲಾಗ್ ಔಟ್",
+    panels: {
+      home: ["ಕೃಷಿ ಕಮಾಂಡ್ ಸೆಂಟರ್", "ನೈಜ-ಸಮಯದ ವಿಶ್ಲೇಷಣೆಗಳು, ಹವಾಮಾನ ಮುನ್ಸೂಚನೆಗಳು ಮತ್ತು ಉಪಗ್ರಹ ಅಂಕಿಅಂಶಗಳು."],
+      scanner: ["AI ಎಲೆ ರೋಗ ಸ್ಕ್ಯಾನರ್", "ಕಂಪ್ಯೂಟರ್ ವಿಷನ್ ಬಳಸಿ ಬೆಳೆ ರೋಗಗಳನ್ನು ಪತ್ತೆಹಚ್ಚಲು ಎಲೆಯ ಫೋಟೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ."],
+      fertilizer: ["ನಿಖರ ಗೊಬ್ಬರ ಮತ್ತು ಮಣ್ಣಿನ ಸಲಹೆ", "ಮಣ್ಣಿನ ಗುಣమಟ್ಟವನ್ನು ರક્ષಿಸಲು ರಸಾಯನಿಕ NPK ಪ್ರಮಾಣ ಮತ್ತು ಸಾವയವ ಆಯ್ಕೆಗಳನ್ನು ಲೆಕ್ಕಹಾಕಿ."],
+      irrigation: ["ಸ್ಮಾರ್ಟ್ ನೀರಾವರಿ ಯೋಜನೆ", "ನೀರಿನ ಬಳಕೆಯನ್ನು 35% ರಷ್ಟು ಕಡಿಮೆ ಮಾಡಲು ನೀರಾವರಿ ವೇಳಾಪಟ್ಟಿಯನ್ನು ಲೆಕ್ಕಹಾಕಿ."],
+      weather: ["ಸ್ಮಾರ್ಟ್ ಹವಾಮಾನ ಸಲಹೆ", "ಹವಾಮಾನ ಮುನ್ಸೂಚನೆಗಳು आणि AI ಕೃಷಿ ಮಾರ್ಗದರ್ಶನಗಳನ್ನು ಪಡೆಯಿರಿ."],
+      market: ["ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು ಮತ್ತು ಮಾರುಕಟ್ಟೆ ಬೆಲೆ", "ಬೆಳೆ ಮಾರುಕಟ್ಟೆ ಬೆಲೆಗಳು, ಸಾಲ ಸೌಲಭ್ಯಗಳು ಮತ್ತು ಸಬ್ಸಿಡಿಗಳನ್ನು ತಿಳಿಯಿರಿ."],
+      yield: ["AI ಇಳುವರಿ ಮುನ್ಸೂಚಕ", "ಒಂದು ಎಕರೆಗೆ ಒಟ್ಟು ಬೆಳೆ ಇಳುವರಿಯನ್ನು ಅಂದಾಜು ಮಾಡಲು ದತ್ತಾಂಶವನ್ನು ಒದಗಿಸಿ."],
+      iot: ["ಡ್ರೋನ್ ಮತ್ತು IoT ಕನ್ಸೋಲ್", "ನೈಜ-ಸಮಯದ ಸೆನ್ಸಾರ್ ನಿಯತಾಂಕಗಳು, ಬ್ಯಾಟರಿ ಮಟ್ಟಗಳು ಮತ್ತು ಡ್ರೋನ್ ವಿಮಾನಗಳನ್ನು ಮೇಲ್ವಿಚಾರಣೆ ಮಾಡಿ."],
+      admin: ["ನಿರ್ವಾಹಕರು ಮತ್ತು ತಜ್ಞರ ಫಲಕ", "ವೇದಿಕೆ ಅಂಕಿಅಂಶಗಳು, ಸಕ್ರಿಯ API ವಿಳಂಬಗಳು ಮತ್ತು ಬಳಕೆದಾರರ ಪಾತ್ರಗಳನ್ನು ನಿರ್ವಹಿಸಿ."],
+      settings: ["ಅಪ್ಲಿಕೇಶನ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳು", "ಭಾಷಾ ಆದ್ಯತೆಗಳು ಮತ್ತು AI ಕೀಗಳನ್ನು ಕಾನ್ಫಿಗರ್ ಮಾಡಿ."]
+    },
+    buttons: {
+      scan: "AI ವಿಶ್ಲೇಷಣೆ ನಡೆಸಿ",
+      npk: "NPK ಶಿಫಾರಸು ಲೆಕ್ಕಹಾಕಿ",
+      irri: "ನೀರಾವರಿ ಯೋಜನೆ ರಚಿಸಿ",
+      yield: "ನಿರೀಕ್ಷಿತ ಇಳುವರಿ ಮುನ್ಸೂಚಿಸಿ",
+      settings: "ಆದ್ಯತೆಗಳನ್ನು ಉಳಿಸಿ"
+    }
+  },
+  ml: {
+    nav: ["ഹോം", "സവിശേഷതകൾ", "പ്രയോജനങ്ങൾ", "വിളകൾ", "ചോദ്യങ്ങൾ"],
+    login: "ലോഗിൻ",
+    hero_badge: "AI കാർഷിക വിപ്ലവം",
+    hero_title: "കൃത്രിമ ബുദ്ധിയിൽ പ്രവർത്തിക്കുന്ന കൃത്യതാ കൃഷി",
+    hero_desc: "കമ്പ്യൂട്ടർ വിഷൻ ഉപയോഗിച്ച് വിള രോഗങ്ങൾ കണ്ടെത്തുക, ജല ഉപയോഗം ഒപ്റ്റിമൈസ് ചെയ്യുക, 11 പ്രാദേശിക ഭാഷകളിൽ സംസാരിക്കുക.",
+    hero_dashboard: "ഡാഷ്‌ബോർഡ് തുറക്കുക",
+    hero_voice: "വോയ്‌സ് അസിസ്റ്റന്റ് പരീക്ഷിക്കുക",
+    sidebar: ["അവലോകനം", "ലീഫ് സ്കാനർ", "മണ്ണും വളവും", "ജലസേചന പദ്ധതി", "കാലാവസ്ഥാ നിർദ്ദേശം", "വിപണിയും പദ്ധതികളും", "വിളവ് പ്രവചനം", "ഡ്രോൺ & IoT", "അഡ്മിൻ പാനൽ", "ക്രമീകരണങ്ങൾ"],
+    logout: "ലോഗ് ഔട്ട്",
+    panels: {
+      home: ["കാർഷിക കമാൻഡ് സെന്റർ", "തത്സമയ വിശകലനങ്ങളും കാലാവസ്ഥാ പ്രവചനങ്ങളും ഉപഗ്രഹ സ്ഥിതിവിവരക്കണക്കുകളും."],
+      scanner: ["AI ഇല രോഗ സ്കാനർ", "കമ്പ്യൂട്ടർ വിഷൻ ഉപയോഗിച്ച് സസ്യ രോഗങ്ങൾ കണ്ടെത്തുന്നതിന് ഇലയുടെ ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യുക."],
+      fertilizer: ["കൃത്യ വളവും മണ്ണ് ഉപദേശവും", "മണ്ണിന്റെ ഗുണനിലവാരം സംരക്ഷിക്കാൻ രാസ NPK അളവുകളും ജൈവ ബദലുകളും കണക്കാക്കുക."],
+      irrigation: ["സ്മാർട്ട് ജലസേചന പദ്ധതി", "ജല ഉപഭോഗം 35% വരെ കുറയ്ക്കുന്നതിന് വിള നനയ്ക്കൽ ഷെഡ്യൂൾ കണക്കാക്കുക."],
+      weather: ["സ്മാർട്ട് കാലാവസ്ഥാ ഉപദേശം", "കാലാവസ്ഥാ പ്രവചനങ്ങളും AI കാർഷിക പ്രവർത്തന ഗൈഡുകളും നേടുക."],
+      market: ["സർക്കാർ പദ്ധതികളും വിപണി വിലയും", "വിള വിലകൾ, വായ്പ ആനുകൂല്യങ്ങൾ, സബ്‌സിഡികൾ എന്നിവ അറിയുക."],
+      yield: ["AI വിളവ് പ്രവചനം", "ഒരു ഏക്കറിലെ മൊത്തം വിളവ് കണക്കാക്കാൻ കാർഷിക ഡാറ്റ നൽകുക."],
+      iot: ["ഡ്രോൺ & IoT കൺസോൾ", "തത്സമയ സെൻസർ പാരാമീറ്ററുകൾ, ബാറ്ററി നിലകൾ, ഡ്രോൺ ഫ്ലൈറ്റുകൾ എന്നിവ നിരീക്ഷിക്കുക."],
+      admin: ["അഡ്മിൻ & വിദഗ്ദ്ധ പാനൽ", "പ്ലാറ്റ്ഫോം സ്ഥിതിവിവരക്കണക്കുകൾ, സജീവ API കാലതാമസങ്ങൾ, ഉപയോക്തൃ റോളുകൾ എന്നിവ നിരീക്ഷിക്കുക."],
+      settings: ["ആപ്ലിക്കേഷൻ ക്രമീകരണങ്ങൾ", "ഭാഷാ മുൻഗണനകളും AI കീകളും കോൺഫിഗർ ചെയ്യുക."]
+    },
+    buttons: {
+      scan: "AI രോഗനിർണ്ണയം നടത്തുക",
+      npk: "NPK ശുപാർശ കണക്കാക്കുക",
+      irri: "ജലസേചന പദ്ധതി രൂപീകരിക്കുക",
+      yield: "പ്രതീക്ഷിക്കുന്ന വിളവ് പ്രവചിക്കുക",
+      settings: "മുൻഗണനകൾ സംരക്ഷിക്കുക"
+    }
+  },
+  bn: {
+    nav: ["হোম", "বৈশিষ্ট্য", "সুবিধা", "ফসল", "প্রশ্নোত্তর"],
+    login: "লগইন",
+    hero_badge: "এআই কৃষি বিপ্লব",
+    hero_title: "কৃত্রিম বুদ্ধিমত্তা চালিত নির্ভুল চাষাবাদ",
+    hero_desc: "কম্পিউটার ভিশন দিয়ে শস্যের রোগ নির্ণয় করুন, পানির ব্যবহার সাশ্রয় করুন এবং ১১টি আঞ্চলিক ভাষায় কথা বলুন।",
+    hero_dashboard: "ড্যাশবোর্ড খুলুন",
+    hero_voice: "ভয়েস অ্যাসিস্ট্যান্ট ব্যবহার করুন",
+    sidebar: ["সংক্ষিপ্ত বিবরণ", "লিফ স্ক্যানার", "মাটি ও সার", "সেচ পরিকল্পনা", "আবহাওয়া পরামর্শ", "বাজার ও প্রকল্প", "ফলন পূর্বাভাস", "ড্রোন ও আইওটি", "অ্যাডমিন প্যানেল", "সেটিংস"],
+    logout: "লগ আউট",
+    panels: {
+      home: ["কৃষি কমান্ড সেন্টার", "রিয়েল-টাইম অ্যানালিটিক্স, আবহাওয়ার পূর্বাভাস এবং উপগ্রহ পরিসংখ্যান।"],
+      scanner: ["এআই লিফ ডিজিজ স্ক্যানার", "কম্পিউটার ভিশন ব্যবহার করে রোগ শনাক্ত করতে পাতার ছবি আপলোড করুন।"],
+      fertilizer: ["সঠিক সার ও মাটি পরামর্শ", "মাটির মান রক্ষায় রাসায়নিক এনপিকে ডোজ এবং জৈব বিকল্প হিসাব করুন।"],
+      irrigation: ["স্মার্ট সেচ পরিকল্পনা", "পানির ব্যবহার ৩৫% কমাতে সেচ সময়সূচী গণনা করুন।"],
+      weather: ["স্মার্ট আবহাওয়া পরামর্শ", "আঞ্চলিক আবহাওয়া পূর্বাভাস এবং এআই কৃষি নির্দেশিকা পান।"],
+      market: ["সরকারি প্রকল্প ও বাজার দর", "ফসলের বাজার মূল্য, ঋণ সুবিধা এবং ভর্তুকি সম্পর্কে জানুন।"],
+      yield: ["এআই ফলন পূর্বাভাস", "একর প্রতি মোট ফসলের ফলন অনুমান করতে কৃষি তথ্য প্রদান করুন।"],
+      iot: ["ড্রোন ও আইওটি কনসোল", "রিয়েল-টাইম সেন্সর রিডিং, ব্যাটারি স্তর এবং ড্রোন ফ্লাইট পর্যবেক্ষণ করুন।"],
+      admin: ["অ্যাডমিন ও বিশেষজ্ঞ প্যানেল", "প্ল্যাটফর্ম পরিসংখ্যান, সক্রিয় এপিআই ল্যাটেন্সি এবং ব্যবহারকারী রোল পরিচালনা করুন।"],
+      settings: ["অ্যাপ্লিকেশন সেটিংস", "ভাষা পছন্দ এবং এআই কী কনফিগার করুন।"]
+    },
+    buttons: {
+      scan: "এআই নির্ণয় করুন",
+      npk: "এনপিকে হিসাব করুন",
+      irri: "সেচ পরিকল্পনা তৈরি করুন",
+      yield: "প্রত্যাশিত ফলন অনুমান করুন",
+      settings: "পছন্দ সংরক্ষণ করুন"
+    }
+  },
+  mr: {
+    nav: ["होम", "वैशिष्ट्ये", "फायदे", "पिके", "नेहमीचे प्रश्न"],
+    login: "लॉगिन",
+    hero_badge: "एआय कृषी क्रांती",
+    hero_title: "कृत्रिम बुद्धिमत्ता आधारित अचूक शेती",
+    hero_desc: "संगणक दृष्टी तंत्रज्ञानाने पिकांवरील रोग ओळखा, पाण्याचा वापर कार्यक्षम करा आणि ११ प्रादेशिक भाषांमध्ये संवाद साधा.",
+    hero_dashboard: "डॅशबोर्ड सुरू करा",
+    hero_voice: "व्हॉइस असिस्टंट वापरा",
+    sidebar: ["आढावा", "लीफ स्कॅनर", "माती आणि खत", "सिंचन नियोजन", "हवामान सल्ला", "बाजार आणि योजना", "पीक उत्पादन अंदाज", "ड्रोन आणि IoT", "प्रशासकीय पॅनेल", "सेटिंग्ज"],
+    logout: "लॉग आउट",
+    panels: {
+      home: ["कृषी कमान केंद्र", "रिअल-टाइम विश्लेषण, हवामान अंदाज आणि उपग्रह आकडेवारी."],
+      scanner: ["एआय लीफ रोग स्कॅनर", "पिकांवरील रोग शोधण्यासाठी पानाचा फोटो अपलोड करा किंवा काढा."],
+      fertilizer: ["अचूक खत आणि माती सल्ला", "मातीची गुणवत्ता राखण्यासाठी रासायनिक एनपीके डोस आणि सेंद्रिय पर्याय मोजा."],
+      irrigation: ["स्मार्ट सिंचन नियोजन", "पाण्याची बचत करण्यासाठी पिकाच्या गरजेनुसार पाणी देण्याचे वेळापत्रक मोजा."],
+      weather: ["स्मार्ट हवामान सल्ला", "हवामान अंदाज आणि एआय कृषी सल्लागार मार्गदर्शिका मिळवा."],
+      market: ["शासकीय योजना आणि बाजारभाव", "बाजारभाव, पीक कर्ज फायदे आणि अनुदानाची माहिती मिळवा."],
+      yield: ["एआय उत्पादन अंदाज", "एकर प्रति पिकाचे एकूण उत्पादन मोजण्यासाठी शेतीचा डेटा प्रविष्ट करा."],
+      iot: ["ड्रोन आणि IoT कन्सोल", "रिअल-टाइम सेन्सर रिडिंग, बॅटरी पातळी आणि ड्रोन उड्डाणे तपासा."],
+      admin: ["प्रशासक आणि तज्ज्ञ पॅनेल", "प्लॅटफॉर्म आकडेवारी, सक्रिय एपीआय विलंब आणि वापरकर्ता भूमिका तपासा."],
+      settings: ["अ‍ॅप सेटिंग्स", "भाषा प्राधान्ये आणि एआय की सेट करा."]
+    },
+    buttons: {
+      scan: "एआय निदान करा",
+      npk: "एनपीके प्रमाण मोजा",
+      irri: "सिंचन आराखडा बनवा",
+      yield: "उत्पादनाचा अंदाज घ्या",
+      settings: "पर्याय जतन करा"
+    }
+  },
+  pa: {
+    nav: ["ਹੋਮ", "ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ", "ਲਾਭ", "ਫਸਲਾਂ", "ਸਵਾਲ-ਜਵਾਬ"],
+    login: "ਲੌਗਇਨ",
+    hero_badge: "AI ਖੇਤੀਬਾੜੀ ਕ੍ਰਾਂਤੀ",
+    hero_title: "ਕ੍ਰਿਤਮ ਬੁੱਧੀ ਦੁਆਰਾ ਸੰਚਾਲਿਤ ਸਟੀਕ ਖੇਤੀ",
+    hero_desc: "ਕੰਪਿਊਟਰ ਵਿਜ਼ਨ ਨਾਲ ਫਸਲਾਂ ਦੇ ਰੋਗਾਂ ਦਾ ਪਤਾ ਲਗਾਓ, ਪਾਣੀ ਦੀ ਵਰਤੋਂ ਸੁਧਾਰੋ ਅਤੇ 11 ਖੇਤਰੀ ਭਾਸ਼ਾਵਾਂ ਵਿੱਚ ਗੱਲਬਾਤ ਕਰੋ।",
+    hero_dashboard: "ਡੈਸ਼ਬੋਰਡ ਸ਼ੁਰੂ ਕਰੋ",
+    hero_voice: "ਵੌਇਸ ਅਸਿਸਟੈਂਟ ਦੀ ਵਰਤੋਂ ਕਰੋ",
+    sidebar: ["ਸੰਖੇਪ ਜਾਣਕਾਰੀ", "ਲੀਫ਼ ਸਕੈਨਰ", "ਮਿੱਟੀ ਅਤੇ ਖਾਦ", "ਸਿੰਚਾਈ ਯੋਜਨਾ", "ਮੌਸਮ ਸਲਾਹ", "ਮੰਡੀ ਅਤੇ ਯੋਜਨਾਵਾਂ", "ਝਾੜ ਦਾ ਅੰਦਾਜ਼ਾ", "ਡਰੋਨ ਅਤੇ IoT", "ਐਡਮਿਨ ਪੈਨਲ", "ਸੈਟਿੰਗਾਂ"],
+    logout: "ਲੌਗ ਆਉਟ",
+    panels: {
+      home: ["ਖੇਤੀਬਾੜੀ ਕਮਾਂਡ ਸੈਂਟਰ", "ਰੀਅਲ-ਟਾਈਮ ਵਿਸ਼ਲੇਸ਼ਣ, ਮੌਸਮ ਦੇ ਪੂਰਵ-ਅਨੁਮਾਨ ਅਤੇ ਸੈਟੇਲਾਈਟ ਅੰਕੜੇ।"],
+      scanner: ["AI ਲੀਫ਼ ਰੋਗ ਸਕੈਨਰ", "ਫਸਲਾਂ ਦੇ ਰੋਗਾਂ ਦਾ ਪતા ਲਗਾਉਣ ਲਈ ਪੱਤੇ ਦੀ ਫੋਟੋ ਅਪਲોਡ ਕਰੋ।"],
+      fertilizer: ["ਸਟੀਕ ਖਾਦ ਅਤੇ ਮਿੱਟੀ ਸਲਾਹ", "ਮਿੱਟੀ की ਗੁਣਵੱਤਾ ਬਚਾਉਣ ਲਈ ਰਸਾਇਣਕ ਐਨਪੀਕੇ ਮਾਤਰਾ ਅਤੇ ਜੈਵਿਕ ਬਦਲ ਲੱਭੋ।"],
+      irrigation: ["ਸਮਾਰਟ ਸਿੰਚਾਈ ਯੋਜਨਾ", "ਪਾਣੀ ਦੀ ਬਚਤ ਕਰਨ ਲਈ ਫਸਲ ਨੂੰ ਪਾਣੀ ਦੇਣ ਦਾ ਸਮਾਂ-ਸਾਰਣੀ ਤਿਆਰ ਕਰੋ।"],
+      weather: ["ਸਮਾਰਟ ਮੌਸਮ ਸਲਾਹ", "ਮੌਸਮ ਦੇ ਪੂਰਵ-ਅਨੁਮਾਨ ਅਤੇ AI ਖੇਤੀਬਾੜੀ ਗਾਈਡਾਂ ਪ੍ਰਾਪਤ ਕਰੋ।"],
+      market: ["ਸਰਕਾਰੀ ਯੋਜਨਾਵਾਂ ਅਤੇ ਮੰਡੀ ਭਾਅ", "ਫਸਲਾਂ ਦੇ ਮੰਡੀ ਰੇਟ, ਕਰਜ਼ਾ ਲਾਭ ਅਤੇ ਸਬਸਿਡੀਆਂ ਬਾਰੇ ਜਾਣੋ।"],
+      yield: ["AI ਝਾੜ ਦਾ ਅੰਦਾਜ਼ਾ", "ਪ੍ਰਤੀ ਏਕੜ ਫਸਲ ਦੇ ਕੁੱल ਝਾੜ ਦਾ ਅੰਦਾਜ਼ਾ ਲਗਾਉਣ ਲਈ ਡੇਟਾ ਦਿਓ।"],
+      iot: ["ਡਰੋਨ ਅਤੇ IoT ਕੰਸੋਲ", "ਰੀਅਲ-ਟਾਈਮ ਸੈਂਸਰ ਰੀਡਿੰਗ, ਬੈਟਰੀ ਪੱਧਰ ਅਤੇ ਡਰੋਨ ਉਡਾਣਾਂ ਦੀ ਨਿਗਰਾਨੀ ਕਰੋ।"],
+      admin: ["ਐਡਮਿਨ ਅਤੇ ਮਾਹਿਰ ਪੈਨਲ", "ਪਲੇਟਫਾਰਮ ਅੰਕੜੇ, ਸਰਗਰਮ API ਲੇਟੈਂਸੀ ਅਤੇ ਯੂਜ਼ਰ ਰੋਲ ਪ੍ਰਬੰਧਿਤ ਕਰੋ।"],
+      settings: ["ਐਪਲੀਕੇਸ਼ਨ ਸੈਟਿੰਗਾਂ", "ਭਾਸ਼ਾ ਦੀ ਚੋਣ ਅਤੇ AI ਕੁੰਜੀਆਂ ਸੈੱਟ ਕਰੋ।"]
+    },
+    buttons: {
+      scan: "AI ਟੈਸट ਕਰੋ",
+      npk: "ਐਨਪੀਕੇ ਸਲਾਹ ਲਓ",
+      irri: "ਸਿੰਚਾਈ ਯੋਜਨਾ ਬਣਾਓ",
+      yield: "ਫਸਲ ਝਾੜ ਦਾ ਅੰਦਾਜ਼ਾ ਲਗਾਓ",
+      settings: "ਸੈਟਿੰਗਾਂ ਸੁਰੱਖਿਅਤ ਕਰੋ"
+    }
+  },
+  gu: {
+    nav: ["હોમ", "વિશેષતાઓ", "લાભો", "પાક", "પ્રશ્નોત્તરી"],
+    login: "લોગિન",
+    hero_badge: "AI કૃષિ ક્રાંતિ",
+    hero_title: "કૃત્રિમ બુદ્ધિમત્તા આધારિત સચોટ ખેતી",
+    hero_desc: "કમ્પ્યુટર વિઝન વડે પાકના રોગો શોધો, પાણીનો બચાવ કરો અને ૧૧ પ્રાદેશિક ભાષાઓમાં મદદ મેળવો.",
+    hero_dashboard: "ડેશબોર્ડ શરૂ કરો",
+    hero_voice: "વોઇસ આસિસ્ટન્ટ વાપરો",
+    sidebar: ["વિહંગાવલોકન", "લીફ સ્કેનર", "જમીન અને ખાતર", "સિંચાઈ યોજના", "હવામાન સલાહ", "બજાર અને યોજનાઓ", "પાક ઉત્પાદન અંદાજ", "ડ્રોન અને IoT", "એડમિન પેનલ", "સેટિંગ્સ"],
+    logout: "લોગ આઉટ",
+    panels: {
+      home: ["કૃષિ કમાન્ડ સેન્ટર", "રીઅલ-ટાઇમ વિશ્લેષણ, હવામાનની આગાહી અને સેટેલાઇટ આંકડા."],
+      scanner: ["AI લીફ રોગ સ્કેનર", "પાકના રોગો શોધવા માટે પાનનો ફોટો પાડો અથવા અપલોડ કરો."],
+      fertilizer: ["સચોટ ખાતર અને જમીન સલાહ", "જમીનની ગુણવત્તા જાળવવા માટે રાસાયણિક એનપીકે પ્રમાણ અને ઓર્ગેનિક વિકલ્પોની ગણતરી કરો."],
+      irrigation: ["સ્માર્ટ સિંચાઈ યોજના", "સમગ્ર પાણીનો વપરાશ ૩૫% સુધી ઘટાડવા માટે સિંચાઈના સમયપત્રકની ગણતરી કરો."],
+      weather: ["સ્માર્ટ હવામાન સલાહ", "હવામાન આગાહી અને AI ખેતી માર્ગદર્શિકા મેળવો."],
+      market: ["સરકારી યોજનાઓ અને બજાર ભાવો", "પાકના બજાર ભાવો, લોન લાભો અને સબસિડીઓ જાણો."],
+      yield: ["AI પાક ઉત્પાદન અંદાજ", "એકર દીઠ પાકનું ઉત્પાદન માપવા માટે ખેતીનો ડેટા સબમિટ કરો."],
+      iot: ["ડ્રોન અને IoT કન્સોલ", "સેન્સર્સ, બેટરી સ્તર અને ડ્રોન ફ્લાઇટ્સનું રીઅલ-ટાઇમ મોનિટરિંગ કરો."],
+      admin: ["એડમિન અને નિષ્ણાત પેનલ", "પ્લેટફોર્મના આંકડા, એપીઆઈ સ્પીડ અને વપરાશકર્તાની ભૂમિકાઓ જુઓ."],
+      settings: ["એપ્લિકેશન સેટિંગ્સ", "ભાષા અને એઆઈ કી સેટ કરો."]
+    },
+    buttons: {
+      scan: "AI નિદાન કરો",
+      npk: "NPK ગણતરી કરો",
+      irri: "સિંચાઈ યોજના બનાવો",
+      yield: "ઉત્પાદન અંદાજ કરો",
+      settings: "પસંદગીઓ સાચવો"
+    }
+  },
+  or: {
+    nav: ["ହୋମ", "ବିଶେଷତା", "ଲାଭ", "ଫସଲ", "ପ୍ରଶ୍ନୋତ୍ତର"],
+    login: "ଲଗଇନ୍",
+    hero_badge: "AI କୃଷି କ୍ରାନ୍ତି",
+    hero_title: "କୃତ୍ରିମ ବୁଦ୍ଧିମତ୍ତା ଦ୍ୱାରା ସଠିକ୍ ଚାଷ",
+    hero_desc: "କମ୍ପ୍ୟୁଟର ଭିଜନ ଦ୍ୱାରା ଫସଲର ରୋଗ ଚିହ୍ନଟ କରନ୍ତୁ, ଜଳ ବ୍ୟବହାର କମାନ୍ତୁ ଏବଂ ୧୧ଟି ଆଞ୍ଚଳିକ ଭାଷାରେ କଥା ହୁଅନ୍ତୁ।",
+    hero_dashboard: "ଡ୍ୟାସବୋର୍ଡ ଆରମ୍ଭ କରନ୍ତୁ",
+    hero_voice: "ଭଏସ୍ ଆସିଷ୍ଟାଣ୍ଟ ବ୍ୟବହାର କରନ୍ତୁ",
+    sidebar: ["ସଂକ୍ଷିପ୍ତ ବିବରଣୀ", "ପତ୍ର ସ୍କାନର୍", "ମାଟି ଓ ସାର", "ଜଳସେଚନ ଯୋଜନା", "ପାଣିପାଗ ପରାମର୍ଶ", "ମଣ୍ଡି ଓ ଯୋଜନା", "ଫସଲ ଅମଳ ଆକଳନ", "ଡ୍ରୋନ୍ ଓ IoT", "ଆଡମିନ୍ ପ୍ୟାନେଲ୍", "ସେଟିଂସ"],
+    logout: "ଲଗଆଉଟ୍",
+    panels: {
+      home: ["କୃଷି କମାଣ୍ଡ ସେଣ୍ଟର", "ରିଅଲ-ଟାଇମ୍ ବିଶ୍ଳେଷଣ, ପାଣିପାଗ ପୂର୍ବାନୁମାନ ଏବଂ ସେଟେଲାଇଟ୍ ପରିସଂଖ୍ୟାନ।"],
+      scanner: ["AI ପତ୍ର ରୋଗ ସ୍କାନର୍", "ଫସଲର ରୋଗ ଚିହ୍ନଟ କରିବା ପାଇଁ ପତ୍ରର ଫଟୋ ଅପଲୋଡ୍ କରନ୍ତୁ।"],
+      fertilizer: ["ସଠିକ୍ ସାର ଓ ମାଟି ପରାମର୍ଶ", "ମାଟିର ଗୁଣବତ୍ତା ରକ୍ଷା କରିବା ପାଇଁ ରାସାୟନିକ NPK ମାତ୍ରା ଏବଂ ଜୈବିକ ବିକଳ୍ප ହିସାବ କରନ୍ତୁ।"],
+      irrigation: ["ସ୍ମାର୍ଟ ଜଳସେଚନ ଯୋଜନା", "ପାଣି ବ୍ୟବହାର ୩୫% ହ୍ରାସ କରିବା ପାଇଁ ଜଳସେଚନ ସମୟ ସୂଚୀ ପ୍ରସ୍ତୁତ କରନ୍ତୁ।"],
+      weather: ["ସ୍ମାର୍ଟ ପାଣିପାଗ ପରାମର୍ଶ", "ପାଣିପାଗ ପୂର୍ବାନୁମାନ ଏବଂ AI କୃଷି ନିର୍ଦ୍ଦେଶାବଳୀ ପାଆନ୍ତୁ।"],
+      market: ["ସରକାରୀ ଯୋଜନା ଓ ମଣ୍ଡି ଦର", "ଫସଲର ମଣ୍ଡି ଦର, ଋଣ ସୁବିଧା ଏବଂ ସବସିଡି ବିଷୟରେ ଜାଣନ୍ତୁ।"],
+      yield: ["AI ଫସଲ ଅମଳ ଆକଳନ", "ଏକର ପ୍ରତି ମୋଟ ଫସଲ ଅମଳ ଆକଳନ କରିବା ପାଇଁ ତଥ୍ୟ ଦିଅନ୍ତୁ।"],
+      iot: ["ଡ୍ରୋନ୍ ଓ IoT କନସୋଲ୍", "ରିଅଲ-ଟାଇମ୍ ସେନ୍ସର ତଥ୍ୟ, ବ୍ୟାଟେରୀ ସ୍ତର ଏବଂ ଡ୍ରୋନ୍ ଉଡ଼ାଣର ଅନୁଧ୍ୟାନ କରନ୍ତୁ।"],
+      admin: ["ଆଡମିନିଷ୍ଟ୍ରେଟର ଓ ବିଶેଷଜ୍ଞ ପ୍ୟାନେଲ୍", "ପ୍ଲାଟଫର୍ମ ପରିସଂଖ୍ୟାନ, ସକ୍ରିୟ API ବେଗ ଏବଂ ୟୁଜର୍ ରୋଲ୍ ପରିଚାଳନା କରନ୍ତୁ।"],
+      settings: ["ଆପ୍ଲିକେସନ୍ ସେଟିଂସ", "ଭାଷା ପସନ୍ଦ ଏବଂ AI କି ସେଟ୍ କରନ୍ତୁ।"]
+    },
+    buttons: {
+      scan: "AI ପରୀକ୍ଷା କରନ୍ତୁ",
+      npk: "NPK ହିସାବ କରନ୍ତୁ",
+      irri: "ଜଳସେଚନ ଯୋଜନା ପ୍ରସ୍ତୁତ କରନ୍ତୁ",
+      yield: "ଆଶା କରାଯାଉଥିବା ଅମଳ ଆକଳନ କରନ୍ତୁ",
+      settings: "ପସନ୍ଦ ସଂରକ୍ଷଣ କରନ୍ତୁ"
+    }
+  }
+};
+
+// --- Dynamic Translator Utility (Instant Frontend Translate) ---
+function applyTranslations(lang) {
+  const dict = uiTranslations[lang] || uiTranslations['en'];
+  
+  // 1. Navigation links
+  const navLinks = document.querySelectorAll('#main-header .nav-links a');
+  if (navLinks.length === 5) {
+    navLinks.forEach((a, i) => {
+      a.textContent = dict.nav[i];
+    });
+  }
+
+  // 2. Header login button
+  const loginBtn = document.getElementById('nav-login-btn');
+  if (loginBtn) {
+    const icon = loginBtn.querySelector('i');
+    loginBtn.innerHTML = '';
+    if (icon) loginBtn.appendChild(icon);
+    loginBtn.appendChild(document.createTextNode(' ' + dict.login));
+  }
+
+  // 3. Hero badge text
+  const badgeText = document.querySelector('.hero-text .badge');
+  if (badgeText) {
+    const icon = badgeText.querySelector('i');
+    badgeText.innerHTML = '';
+    if (icon) badgeText.appendChild(icon);
+    badgeText.appendChild(document.createTextNode(' ' + dict.hero_badge));
+  }
+
+  // 4. Hero Title, Desc, and Buttons
+  const h1 = document.querySelector('.hero-text h1');
+  if (h1) h1.textContent = dict.hero_title;
+
+  const desc = document.querySelector('.hero-text p');
+  if (desc) desc.textContent = dict.hero_desc;
+
+  const dashboardBtn = document.getElementById('hero-get-started');
+  if (dashboardBtn) {
+    dashboardBtn.innerHTML = dict.hero_dashboard + ' <i class="fa-solid fa-arrow-right"></i>';
+  }
+
+  const voiceBtn = document.getElementById('hero-try-voice');
+  if (voiceBtn) {
+    voiceBtn.innerHTML = '<i class="fa-solid fa-microphone"></i> ' + dict.hero_voice;
+  }
+
+  // 5. Sidebar links
+  const sidebarLinks = document.querySelectorAll('.sidebar-nav .sidebar-link');
+  sidebarLinks.forEach((link, i) => {
+    if (i < dict.sidebar.length) {
+      const icon = link.querySelector('i');
+      link.innerHTML = '';
+      if (icon) link.appendChild(icon);
+      link.appendChild(document.createTextNode(' ' + dict.sidebar[i]));
+    }
+  });
+
+  // 6. Sidebar logout button
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) {
+    const icon = logoutBtn.querySelector('i');
+    logoutBtn.innerHTML = '';
+    if (icon) logoutBtn.appendChild(icon);
+    logoutBtn.appendChild(document.createTextNode(' ' + dict.logout));
+  }
+
+  // 7. Panel Headers
+  const panelKeys = ['home', 'scanner', 'fertilizer', 'irrigation', 'weather', 'market', 'yield', 'iot', 'admin', 'settings'];
+  panelKeys.forEach(key => {
+    const p = document.getElementById(`panel-${key}`);
+    if (p) {
+      const title = p.querySelector('.panel-header h2');
+      const paragraph = p.querySelector('.panel-header p');
+      if (title && dict.panels[key]) title.textContent = dict.panels[key][0];
+      if (paragraph && dict.panels[key]) paragraph.textContent = dict.panels[key][1];
+    }
+  });
+
+  // 8. Dynamic Button Calls to Action
+  const runScan = document.getElementById('run-scan-btn');
+  if (runScan) {
+    runScan.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> ' + dict.buttons.scan;
+  }
+  const computeNpk = document.querySelector('#fertilizer-form button[type="submit"]');
+  if (computeNpk) {
+    computeNpk.textContent = dict.buttons.npk;
+  }
+  const generateIrri = document.querySelector('#irrigation-form button[type="submit"]');
+  if (generateIrri) {
+    generateIrri.textContent = dict.buttons.irri;
+  }
+  const predictYield = document.querySelector('#yield-form button[type="submit"]');
+  if (predictYield) {
+    predictYield.textContent = dict.buttons.yield;
+  }
+  const saveSettings = document.getElementById('save-settings-btn');
+  if (saveSettings) {
+    saveSettings.textContent = dict.buttons.settings;
+  }
+}
+  </script>
+</body>
+</html>
